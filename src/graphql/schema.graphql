@@ -1,0 +1,14 @@
+type Query {
+	recipe: Recipe!
+	recipes: [Recipe!]!
+}
+
+type Recipe {
+	id: Int!
+	title: String!
+	description: String!
+}
+
+schema {
+	query: Query
+}
