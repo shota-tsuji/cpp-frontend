@@ -1,5 +1,9 @@
+
+
+
+
 type Query {
-	recipe: Recipe!
+	recipeDetail(id: ID!): RecipeDetail!
 	recipes: [Recipe!]!
 }
 
@@ -8,6 +12,22 @@ type Recipe {
 	title: String!
 	description: String!
 }
+
+type RecipeDetail {
+	id: Int!
+	title: String!
+	description: String!
+	steps: [Step!]!
+}
+
+type Step {
+	id: Int!
+	description: String!
+	resourceId: Int!
+	orderNumber: Int!
+	duration: Int!
+}
+
 
 schema {
 	query: Query
