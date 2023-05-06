@@ -5,7 +5,7 @@ import { useRecipeDetailQuery } from './generated/graphql';
 
 
 function App() {
-  const [result, _reexecuteQuery] = useRecipeDetailQuery({ variables: { recipeId: "0" } })
+  const [result, _reexecuteQuery] = useRecipeDetailQuery({ variables: { recipeId: "00000000-0000-0000-0000-000000000000" } })
   //const [result, _reexecuteQuery] = useRecipesQuery();
   const { data, fetching, error } = result;
   console.log(JSON.stringify({ fetching, data, error }, null, 2));

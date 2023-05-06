@@ -1,6 +1,20 @@
 
+input CreateRecipeDetailInput {
+	title: String!
+	description: String!
+	steps: [CreateStepInput!]!
+}
 
+input CreateStepInput {
+	description: String!
+	resourceId: Int!
+	orderNumber: Int!
+	duration: Int!
+}
 
+type Mutation {
+	createRecipeDetail(recipeDetailData: CreateRecipeDetailInput!): RecipeDetail!
+}
 
 type Query {
 	recipeDetail(id: ID!): RecipeDetail!
@@ -8,27 +22,27 @@ type Query {
 }
 
 type Recipe {
-	id: Int!
+	id: String!
 	title: String!
 	description: String!
 }
 
 type RecipeDetail {
-	id: Int!
+	id: String!
 	title: String!
 	description: String!
 	steps: [Step!]!
 }
 
 type Step {
-	id: Int!
+	id: String!
 	description: String!
 	resourceId: Int!
 	orderNumber: Int!
 	duration: Int!
 }
 
-
 schema {
 	query: Query
+	mutation: Mutation
 }
