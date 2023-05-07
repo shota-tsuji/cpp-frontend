@@ -1,6 +1,7 @@
 import React from "react";
 import { useRecipeDetailQuery } from "../../generated/graphql";
-import { Route, useParams } from "react-router-dom";
+import { Route, Routes, useParams } from "react-router-dom";
+import RecipeDetailEdit from "../../features/recipes/RecipeDetailEdit";
 
 export default function RecipeDetailPage() {
   //const { id } = useParams<{ te: string }>();
@@ -22,6 +23,11 @@ export default function RecipeDetailPage() {
           <ul>
 {steps.map(step => (<li key={step.id}>{step.description}, {step.duration}</li>))}
           </ul>
+            <div>
+            <Routes>
+            <Route path="edit" element={<RecipeDetailEdit />} />
+            </Routes>
+            </div>
             </React.Fragment>
           );
 }
