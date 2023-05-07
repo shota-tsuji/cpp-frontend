@@ -11,10 +11,6 @@ function App() {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   //let {id, title, description, steps, ...rest } = recipeDetail;
 
-          //<p>{recipeDetail.id}: {recipeDetail.title}: {recipeDetail.description}</p>
-          //<ul>
-//{steps.map(step => (<li key={step.id}>{step.description}, {step.duration}</li>))}
-          //</ul>
   return (
 <>
 <MantineProvider withGlobalStyles withNormalizeCSS>
