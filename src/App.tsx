@@ -1,6 +1,5 @@
 import './App.css'
 
-import { useRecipesQuery } from './generated/graphql';
 import { MantineProvider } from '@mantine/core';
 import { BrowserRouter as Router } from "react-router-dom";
 import MainRouter from './pages/MainRoutes';
