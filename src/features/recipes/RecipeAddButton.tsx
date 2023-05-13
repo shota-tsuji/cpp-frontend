@@ -2,17 +2,20 @@ import { Button } from "@mantine/core";
 import { useNavigate } from "react-router-dom";
 import { CreateRecipeDetailInput, useCreateRecipeDetailMutation } from "../../generated/graphql";
 
-async function submitRecipe() {
-
-}
-
 export default function RecipeAddButton() {
     const navigate = useNavigate();
 
     const defaultRecipe: CreateRecipeDetailInput = {
         description: "description",
         title: "Example Recipe",
-        steps: []
+        steps: [
+          { 
+            description: "step0",
+            orderNumber: 0,
+            resourceId: 1,
+            duration: 5,
+          }
+        ]
     };
 
     const [_createRecipeResult, createRecipe] = useCreateRecipeDetailMutation();
