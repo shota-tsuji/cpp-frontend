@@ -40,3 +40,31 @@
 .read-the-docs {
   color: #888;
 }
+
+.process {
+  position: relative;
+}
+
+.process-bar-vertical {
+  position: absolute;
+  z-index: 0;
+  height: 1rem;
+  width: 4rem;
+  top: 0;
+  left: 0;
+}
+
+.process-bar-horizontal {
+  position: absolute;
+  z-index: 1;
+  height: 1rem;
+  top: 0;
+  left: 0;
+}
+
+.process-step {
+  position: absolute;
+  z-index: 2;
+  top: 0;
+  left: 0;
+}
