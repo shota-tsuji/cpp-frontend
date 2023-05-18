@@ -3,6 +3,7 @@ import '../App.css';
 import {Grid, Container, Box, Button, Divider} from '@mantine/core';
 import { Route, Routes } from "react-router-dom";
 import RecipeRouter from "./recipes/RecipeRoutes";
+import StepButton from "../features/process/StepButton";
 
 const Home = () => {
     return (
@@ -26,24 +27,29 @@ export default function MainRouter() {
 function MyGrid() {
 return (
     <div className="process">
+        <div className="process-bar-side">
+           <div style={{pos: "absolute", top: 0, left: 0, width: 80, height: 60}} >
+               <span>0min</span>
+           </div>
+            <div style={{pos: "absolute", top: 60, left: 0, width: 80, height: 60}} >
+                <span>5min</span>
+            </div>
+        </div>
         <div className="process-bar-horizontal">
-            <div style={{height: 80}}>
-                <Divider size={10} style={{pos: "absolute", top: 10, left: 10, width: 500}}/>
+            <div style={{height: 60}}>
+                <Divider style={{pos: "absolute", top: 0, left: 0, width: 500}}/>
             </div>
             <div style={{height: 80}}>
-                <Divider size={10} style={{pos: "absolute", top: 10, left: 10, width: 1000}}/>
-            </div>
-            <div style={{height: 80}}>
-                <Divider size={10} style={{pos: "absolute", top: 10, left: 10, width: 1000}}/>
+                <Divider style={{pos: "absolute", top: 0, left: 0, width: 1000}}/>
             </div>
         </div>
         <div >
-            <Button className="process-step" style={{width: 80, pos: "absolute", top: 20, left: 0}}>Step 1</Button>
-            <Button className="process-step" style={{width: 80, pos: "absolute", top: 20, left: 100}}>Step 2</Button>
+            <StepButton top={0} left={80} height={58} description="Step1" />
+            <StepButton top={60} left={80} height={58} description="Step2" />
         </div>
         <div className="process-step">
-            <Button className="process-step" style={{width: 120, pos: "absolute", top: 100, left: 0, ta: "left"}}>Step 3</Button>
-            <Button className="process-step" style={{width: 80, pos: "absolute", top: 100, left: 100}}>Step 4</Button>
+            <StepButton top={60} left={340} height={58} description="Step3" />
+            <StepButton top={120} left={340} height={58} description="Step4" />
         </div>
         <div className="process-bar-vertical" style={{height: 80}}>
             <Divider orientation="vertical" size={10} style={{pos: "absolute", top: 10, left: 80, height: 200}}/>

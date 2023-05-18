@@ -1,6 +1,6 @@
 #root {
   max-width: 1280px;
-  margin: 0 auto;
+  margin: 0;
   padding: 2rem;
   text-align: center;
 }
@@ -59,6 +59,14 @@
   z-index: 1;
   height: 1rem;
   top: 0;
+  left: 4rem;
+}
+
+.process-bar-side {
+  position: absolute;
+  z-index: 1;
+  height: 1rem;
+  top: -1rem;
   left: 0;
 }
 
