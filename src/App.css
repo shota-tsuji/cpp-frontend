@@ -1,7 +1,12 @@
 #root {
   max-width: 1280px;
-  margin: 0;
-  padding: 2rem;
+  margin: auto;
+  text-align: center;
+}
+
+.recipe-grid {
+  position: relative;
+  margin-top: 1rem;
   text-align: center;
 }
 

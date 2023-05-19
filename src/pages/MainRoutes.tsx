@@ -110,17 +110,20 @@ function ProcessGrid() {
     const time_label_list = time_label_values.map((value) => <TimeLabel time={value}/>);
 
     const bar_width = width * resource_kind;
-    const bar_list = Array.from(Array(time_label_count).keys()).map(i => <TimeHorizontalBar top={i * height}
-                                                                                            height={height}
-                                                                                            width={bar_width}/>);
+    const bar_list = Array.from(Array(time_label_count).keys())
+        .map(i => <TimeHorizontalBar top={i * height}
+                                     height={height}
+                                     width={bar_width}/>);
     const bar_height = (time_label_count - 1) * height;
 
-    const resource_columns = Array.from(Array(resource_kind).keys()).map(i => <ResourceColumn top={0}
-                                                                                              left={i * width + left_pad}
-                                                                                              height={bar_height}
-                                                                                              steps={resource_steps[i]}/>);
+    const resource_columns = Array.from(Array(resource_kind).keys())
+        .map(i => <ResourceColumn top={0}
+                                  left={i * width + left_pad}
+                                  height={bar_height}
+                                  steps={resource_steps[i]}/>);
+
     return (
-        <div>
+        <div className="recipe-grid" style={{top: -300, left: -400}}>
             <div className="process-bar-side">
                 {time_label_list}
             </div>
