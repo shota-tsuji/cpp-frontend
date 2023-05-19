@@ -6,7 +6,6 @@
 
 .recipe-grid {
   position: relative;
-  margin-top: 1rem;
   text-align: center;
 }
 
@@ -71,7 +70,7 @@
 .process-bar-side {
   position: relative;
   z-index: 1;
-  height: 1rem;
+  height: auto;
   top: 0;
   left: 0;
 }
