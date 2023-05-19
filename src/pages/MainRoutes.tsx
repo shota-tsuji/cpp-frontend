@@ -98,27 +98,30 @@ function ProcessGrid() {
         }
     ];
     const height = 60;
+    const width = 260;
+    const left_pad = 30;
     const resource_kind = 2;
     const unit_of_time = 5;
     const time_label_count = 6;
-    const bar_width = 260 * resource_kind;
+    const bar_width = width * resource_kind;
     const time_label_values = Array.from(Array(time_label_count).keys()).map(x => x * unit_of_time);
     const time_label_list = time_label_values.map((value) => <TimeLabel time={value} />);
     const bar_list = Array.from(Array(time_label_count).keys()).map(i => <TimeHorizontalBar top={i*height} height={height} width={bar_width} />);
+    const bar_height = (time_label_count-1)*height;
 return (
     <div>
         <div className="process-bar-side">
             {time_label_list}
         </div>
         <div className="process" style={{left: 80}}>
-            <div className="process-bar-horizontal" style={{left: 30}}>
+            <div className="process-bar-horizontal" style={{left: left_pad}}>
                 {bar_list}
             </div>
 
-            <VerticalStartBar height={300} width={30} />
+            <VerticalStartBar height={bar_height} width={left_pad} />
 
-            <ResourceColumn top={0} left={30} height={300} steps={resource0_steps} />
-            <ResourceColumn top={0} left={290} height={300} steps={resource1_steps} />
+            <ResourceColumn top={0} left={left_pad} height={bar_height} steps={resource0_steps} />
+            <ResourceColumn top={0} left={left_pad+width} height={bar_height} steps={resource1_steps} />
         </div>
     </div>
   );
