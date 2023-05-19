@@ -26,10 +26,7 @@ type ResourceColumnProps = {
 }
 
 function ResourceColumn(props: ResourceColumnProps) {
-    const theme = useMantineTheme();
     const step_buttons = props.steps.map((step) => <StepButton top={step.top} left={step.left} height={step.height} description={step.description} />);
-    /* <StepButton top={0} left={0} height={58} description="Step1" /> */
-    /* <StepButton top={60} left={0} height={58} description="Step2" /> */
     return (
         <div className="process-step" style={{top: props.top, left: props.left, height: props.height, width: 260}}>
             {step_buttons}
@@ -58,12 +55,15 @@ function TimeLabel(props: TimeLabelProps) {
     );
 }
 
-type TimeHorizontalBarProps = { width: number; }
+type TimeHorizontalBarProps = {
+    width: number;
+    height: number;
+    top: number;
+}
 
 function TimeHorizontalBar(props: TimeHorizontalBarProps) {
     return (
-        <div style={{height: 60}}>
-            <Divider style={{pos: "absolute", top: 0, left: 0, width: props.width}}/>
+        <div className="div-horizontal" style={{top: props.top, height: props.height, width: props.width}}>
         </div>
     );
 }
@@ -97,25 +97,29 @@ function ProcessGrid() {
             description: "Step2"
         }
     ];
+    const height = 60;
+    const resource_kind = 2;
     const unit_of_time = 5;
     const time_label_count = 6;
-    const bar_width = 260 * 2 + 80;
+    const bar_width = 260 * resource_kind;
     const time_label_values = Array.from(Array(time_label_count).keys()).map(x => x * unit_of_time);
     const time_label_list = time_label_values.map((value) => <TimeLabel time={value} />);
-    const bar_list = Array.from(Array(time_label_count).keys()).map(_ => <TimeHorizontalBar width={bar_width} />);
+    const bar_list = Array.from(Array(time_label_count).keys()).map(i => <TimeHorizontalBar top={i*height} height={height} width={bar_width} />);
 return (
-    <div className="process">
+    <div>
         <div className="process-bar-side">
             {time_label_list}
         </div>
-        <div className="process-bar-horizontal">
-            {bar_list}
+        <div className="process" style={{left: 80}}>
+            <div className="process-bar-horizontal" style={{left: 30}}>
+                {bar_list}
+            </div>
+
+            <VerticalStartBar height={300} width={30} />
+
+            <ResourceColumn top={0} left={30} height={300} steps={resource0_steps} />
+            <ResourceColumn top={0} left={290} height={300} steps={resource1_steps} />
         </div>
-
-        <VerticalStartBar height={300} width={80} />
-
-        <ResourceColumn top={0} left={80} height={300} steps={resource0_steps} />
-        <ResourceColumn top={0} left={340} height={300} steps={resource1_steps} />
     </div>
   );
 }

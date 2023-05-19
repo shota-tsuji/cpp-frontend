@@ -51,19 +51,23 @@
   border-right: 1px solid darkgrey;
 }
 
+.div-horizontal {
+  position: absolute;
+  z-index: 1;
+  border-top: 1px solid darkgrey;
+}
+
 .process-bar-horizontal {
   position: absolute;
   z-index: 1;
-  height: 1rem;
   top: 0;
-  left: 4rem;
 }
 
 .process-bar-side {
-  position: absolute;
+  position: relative;
   z-index: 1;
   height: 1rem;
-  top: -1rem;
+  top: 0;
   left: 0;
 }
 
