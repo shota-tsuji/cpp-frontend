@@ -48,10 +48,7 @@
 .process-bar-vertical {
   position: absolute;
   z-index: 0;
-  height: 1rem;
-  width: 4rem;
-  top: 0;
-  left: 0;
+  border-right: 1px solid darkgrey;
 }
 
 .process-bar-horizontal {
@@ -73,4 +70,5 @@
 .process-step {
   position: absolute;
   z-index: 2;
+  border-right: 1px solid darkgrey;
 }

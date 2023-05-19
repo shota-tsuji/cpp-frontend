@@ -31,14 +31,44 @@ function ResourceColumn(props: ResourceColumnProps) {
     /* <StepButton top={0} left={0} height={58} description="Step1" /> */
     /* <StepButton top={60} left={0} height={58} description="Step2" /> */
     return (
-        <div className="process-step" style={{top: props.top, left: props.left, height: props.height, width: 260, outline: "solid", color: theme.colors.dark}}>
+        <div className="process-step" style={{top: props.top, left: props.left, height: props.height, width: 260}}>
             {step_buttons}
         </div>
     );
 }
 
+type VerticalStartBarProps = {height: number; width: number;}
+
+function VerticalStartBar(props: VerticalStartBarProps) {
+    return (
+        <div className="process-bar-vertical" style={{top: 0, left: 0, height: props.height, width: props.width}}>
+        </div>
+    );
+}
+
+type TimeLabelProps = {
+    time: number;
+}
+
+function TimeLabel(props: TimeLabelProps) {
+    return (
+        <div style={{pos: "absolute", top: 0, left: 0, width: 80, height: 60}} >
+            <span>{props.time}min</span>
+        </div>
+    );
+}
+
+type TimeHorizontalBarProps = { width: number; }
+
+function TimeHorizontalBar(props: TimeHorizontalBarProps) {
+    return (
+        <div style={{height: 60}}>
+            <Divider style={{pos: "absolute", top: 0, left: 0, width: props.width}}/>
+        </div>
+    );
+}
+
 function ProcessGrid() {
-    const theme = useMantineTheme();
     const resource0_steps = [
         {
             top: 0,
@@ -63,39 +93,29 @@ function ProcessGrid() {
         {
             top: 120,
             left: 0,
-            height: 58,
+            height: 118,
             description: "Step2"
         }
     ];
-    /*
-        <div className="process-step" style={{top: 0, left: 340, height: 600, width: 260, outline: "solid"}}>
-            <StepButton top={60} left={0} height={58} description="Step3" />
-            <StepButton top={120} left={0} height={58} description="Step4" />
-        </div>
-     */
+    const unit_of_time = 5;
+    const time_label_count = 6;
+    const bar_width = 260 * 2 + 80;
+    const time_label_values = Array.from(Array(time_label_count).keys()).map(x => x * unit_of_time);
+    const time_label_list = time_label_values.map((value) => <TimeLabel time={value} />);
+    const bar_list = Array.from(Array(time_label_count).keys()).map(_ => <TimeHorizontalBar width={bar_width} />);
 return (
     <div className="process">
         <div className="process-bar-side">
-           <div style={{pos: "absolute", top: 0, left: 0, width: 80, height: 60}} >
-               <span>0min</span>
-           </div>
-            <div style={{pos: "absolute", top: 60, left: 0, width: 80, height: 60}} >
-                <span>5min</span>
-            </div>
+            {time_label_list}
         </div>
         <div className="process-bar-horizontal">
-            <div style={{height: 60}}>
-                <Divider style={{pos: "absolute", top: 0, left: 0, width: 500}}/>
-            </div>
-            <div style={{height: 80}}>
-                <Divider style={{pos: "absolute", top: 0, left: 0, width: 1000}}/>
-            </div>
+            {bar_list}
         </div>
-        <ResourceColumn top={0} left={80} height={600} steps={resource0_steps} />
-        <ResourceColumn top={0} left={340} height={600} steps={resource1_steps} />
-        <div className="process-bar-vertical" style={{height: 80, top: 0, left: 200}}>
-            <Divider orientation="vertical" size={10} style={{pos: "absolute", height: 200}}/>
-        </div>
+
+        <VerticalStartBar height={300} width={80} />
+
+        <ResourceColumn top={0} left={80} height={300} steps={resource0_steps} />
+        <ResourceColumn top={0} left={340} height={300} steps={resource1_steps} />
     </div>
   );
 }
