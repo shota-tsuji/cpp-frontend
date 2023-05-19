@@ -69,7 +69,8 @@ function TimeHorizontalBar(props: TimeHorizontalBarProps) {
 }
 
 function ProcessGrid() {
-    const resource0_steps = [
+    const resource_steps = [
+        [
         {
             top: 0,
             left: 0,
@@ -82,8 +83,7 @@ function ProcessGrid() {
             height: 58,
             description: "Step2"
         }
-    ];
-    const resource1_steps = [
+    ],[
         {
             top: 60,
             left: 0,
@@ -96,18 +96,24 @@ function ProcessGrid() {
             height: 118,
             description: "Step2"
         }
+    ]
     ];
+
     const height = 60;
     const width = 260;
     const left_pad = 30;
     const resource_kind = 2;
     const unit_of_time = 5;
+
     const time_label_count = 6;
-    const bar_width = width * resource_kind;
     const time_label_values = Array.from(Array(time_label_count).keys()).map(x => x * unit_of_time);
     const time_label_list = time_label_values.map((value) => <TimeLabel time={value} />);
+
+    const bar_width = width * resource_kind;
     const bar_list = Array.from(Array(time_label_count).keys()).map(i => <TimeHorizontalBar top={i*height} height={height} width={bar_width} />);
     const bar_height = (time_label_count-1)*height;
+
+    const resource_columns = Array.from(Array(resource_kind).keys()).map(i => <ResourceColumn top={0} left={i*width+left_pad} height={bar_height} steps={resource_steps[i]} />);
 return (
     <div>
         <div className="process-bar-side">
@@ -120,8 +126,7 @@ return (
 
             <VerticalStartBar height={bar_height} width={left_pad} />
 
-            <ResourceColumn top={0} left={left_pad} height={bar_height} steps={resource0_steps} />
-            <ResourceColumn top={0} left={left_pad+width} height={bar_height} steps={resource1_steps} />
+            {resource_columns}
         </div>
     </div>
   );
