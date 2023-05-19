@@ -1,7 +1,6 @@
 import React from "react";
 import '../App.css';
-import { MantineTheme, useMantineTheme, Divider} from '@mantine/core';
-import { Route, Routes } from "react-router-dom";
+import {Route, Routes} from "react-router-dom";
 import RecipeRouter from "./recipes/RecipeRoutes";
 import StepButton, {StepButtonProps} from "../features/process/StepButton";
 
@@ -10,12 +9,12 @@ import StepButton, {StepButtonProps} from "../features/process/StepButton";
 // https://stackoverflow.com/questions/70815495/react-nested-routes-for-every-folder
 export default function MainRouter() {
     return (
-            <Routes>
-            <Route path="/" element={<ProcessGrid />} />
-            <Route path="/recipes/*" element={<RecipeRouter />} />
-            <Route path="/process/*" element={<ProcessGrid />} />
-            </Routes>
-            );
+        <Routes>
+            <Route path="/" element={<ProcessGrid/>}/>
+            <Route path="/recipes/*" element={<RecipeRouter/>}/>
+            <Route path="/process/*" element={<ProcessGrid/>}/>
+        </Routes>
+    );
 }
 
 type ResourceColumnProps = {
@@ -26,7 +25,8 @@ type ResourceColumnProps = {
 }
 
 function ResourceColumn(props: ResourceColumnProps) {
-    const step_buttons = props.steps.map((step) => <StepButton top={step.top} left={step.left} height={step.height} description={step.description} />);
+    const step_buttons = props.steps.map((step) => <StepButton top={step.top} left={step.left} height={step.height}
+                                                               description={step.description}/>);
     return (
         <div className="process-step" style={{top: props.top, left: props.left, height: props.height, width: 260}}>
             {step_buttons}
@@ -34,7 +34,7 @@ function ResourceColumn(props: ResourceColumnProps) {
     );
 }
 
-type VerticalStartBarProps = {height: number; width: number;}
+type VerticalStartBarProps = { height: number; width: number; }
 
 function VerticalStartBar(props: VerticalStartBarProps) {
     return (
@@ -49,7 +49,7 @@ type TimeLabelProps = {
 
 function TimeLabel(props: TimeLabelProps) {
     return (
-        <div style={{pos: "absolute", top: 0, left: 0, width: 80, height: 60}} >
+        <div style={{pos: "absolute", top: 0, left: 0, width: 80, height: 60}}>
             <span>{props.time}min</span>
         </div>
     );
@@ -71,32 +71,32 @@ function TimeHorizontalBar(props: TimeHorizontalBarProps) {
 function ProcessGrid() {
     const resource_steps = [
         [
-        {
-            top: 0,
-            left: 0,
-            height: 58,
-            description: "Step1"
-        },
-        {
-            top: 60,
-            left: 0,
-            height: 58,
-            description: "Step2"
-        }
-    ],[
-        {
-            top: 60,
-            left: 0,
-            height: 58,
-            description: "Step3"
-        },
-        {
-            top: 120,
-            left: 0,
-            height: 118,
-            description: "Step2"
-        }
-    ]
+            {
+                top: 0,
+                left: 0,
+                height: 58,
+                description: "Step1"
+            },
+            {
+                top: 60,
+                left: 0,
+                height: 58,
+                description: "Step2"
+            }
+        ], [
+            {
+                top: 60,
+                left: 0,
+                height: 58,
+                description: "Step3"
+            },
+            {
+                top: 120,
+                left: 0,
+                height: 118,
+                description: "Step2"
+            }
+        ]
     ];
 
     const height = 60;
@@ -107,27 +107,32 @@ function ProcessGrid() {
 
     const time_label_count = 6;
     const time_label_values = Array.from(Array(time_label_count).keys()).map(x => x * unit_of_time);
-    const time_label_list = time_label_values.map((value) => <TimeLabel time={value} />);
+    const time_label_list = time_label_values.map((value) => <TimeLabel time={value}/>);
 
     const bar_width = width * resource_kind;
-    const bar_list = Array.from(Array(time_label_count).keys()).map(i => <TimeHorizontalBar top={i*height} height={height} width={bar_width} />);
-    const bar_height = (time_label_count-1)*height;
+    const bar_list = Array.from(Array(time_label_count).keys()).map(i => <TimeHorizontalBar top={i * height}
+                                                                                            height={height}
+                                                                                            width={bar_width}/>);
+    const bar_height = (time_label_count - 1) * height;
 
-    const resource_columns = Array.from(Array(resource_kind).keys()).map(i => <ResourceColumn top={0} left={i*width+left_pad} height={bar_height} steps={resource_steps[i]} />);
-return (
-    <div>
-        <div className="process-bar-side">
-            {time_label_list}
-        </div>
-        <div className="process" style={{left: 80}}>
-            <div className="process-bar-horizontal" style={{left: left_pad}}>
-                {bar_list}
+    const resource_columns = Array.from(Array(resource_kind).keys()).map(i => <ResourceColumn top={0}
+                                                                                              left={i * width + left_pad}
+                                                                                              height={bar_height}
+                                                                                              steps={resource_steps[i]}/>);
+    return (
+        <div>
+            <div className="process-bar-side">
+                {time_label_list}
             </div>
+            <div className="process" style={{left: 80}}>
+                <div className="process-bar-horizontal" style={{left: left_pad}}>
+                    {bar_list}
+                </div>
 
-            <VerticalStartBar height={bar_height} width={left_pad} />
+                <VerticalStartBar height={bar_height} width={left_pad}/>
 
-            {resource_columns}
+                {resource_columns}
+            </div>
         </div>
-    </div>
-  );
+    );
 }
