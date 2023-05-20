@@ -1,6 +1,7 @@
 /* height is needed to display main content */
 #root {
-  height: 640px;
+  height: 2560px;
+  max-height: 1280px;
   width: 1280px;
   max-width: 1280px;
   margin: auto;
@@ -55,6 +56,8 @@
 
 .process {
   position: absolute;
+  height: 100%;
+  width: 100%;
 }
 
 .process-bar-vertical {
