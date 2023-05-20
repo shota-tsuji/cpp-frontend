@@ -105,7 +105,7 @@ function ProcessGrid() {
     const resource_kind = 2;
     const unit_of_time = 5;
 
-    const time_label_count = 6;
+    const time_label_count = 12;
     const time_label_values = Array.from(Array(time_label_count).keys()).map(x => x * unit_of_time);
     const time_label_list = time_label_values.map((value) => <TimeLabel time={value}/>);
 
@@ -123,7 +123,7 @@ function ProcessGrid() {
                                   steps={resource_steps[i]}/>);
 
     return (
-        <div className="recipe-grid" style={{top: -300, left: -400}}>
+        <div className="recipe-grid" style={{height: "100%"}}>
             <div className="process-bar-side">
                 {time_label_list}
             </div>

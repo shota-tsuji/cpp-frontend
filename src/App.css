@@ -1,10 +1,15 @@
 #root {
   max-width: 1280px;
+  width: 1280px;
+  max-height: 1280px;
+  height: 1280px;
   margin: auto;
   text-align: center;
 }
 
 .recipe-grid {
+  width: 50%;
+  margin: auto;
   position: relative;
   text-align: center;
 }
@@ -46,7 +51,7 @@
 }
 
 .process {
-  position: relative;
+  position: absolute;
 }
 
 .process-bar-vertical {
@@ -68,7 +73,7 @@
 }
 
 .process-bar-side {
-  position: relative;
+  position: absolute;
   z-index: 1;
   height: auto;
   top: 0;
