@@ -2,7 +2,7 @@ import React from "react";
 import '../App.css';
 import {Route, Routes} from "react-router-dom";
 import RecipeRouter from "./recipes/RecipeRoutes";
-import StepButton, {StepButtonProps} from "../features/process/StepButton";
+import StepButton, {STEP_BUTTON_UNIT, StepButtonProps} from "../features/process/StepButton";
 
 // use wildcard pattern to segregate and match to multiple nested routes.
 // https://reactrouter.com/en/main/route/route#splats
@@ -73,7 +73,6 @@ function ProcessGrid() {
     const height = 60;
     const width = 260;
     const left_pad = 30;
-    const resource_kind = 2;
     const unit_of_time = 5;
 
     const resource_steps = [
@@ -83,14 +82,14 @@ function ProcessGrid() {
                 recipe_name: "カレー",
                 description: "野菜を切る",
                 top: 0 * height,
-                height: 58,
+                height: 0 * height + STEP_BUTTON_UNIT.height,
             },
             {
                 id: 1,
                 recipe_name: "きんぴらごぼう",
                 description: "野菜を切る",
                 top: 1 * height,
-                height: 58,
+                height: 0 * height + STEP_BUTTON_UNIT.height,
             }
         ], [
             {
@@ -98,18 +97,34 @@ function ProcessGrid() {
                 recipe_name: "カレー",
                 description: "煮込む",
                 top: 1 * height,
-                height: 58,
+                height: 0* height + STEP_BUTTON_UNIT.height,
             },
             {
                 id: 3,
                 recipe_name: "きんぴらごぼう",
                 description: "柔らかくなるまで煮る",
                 top: 2 * height,
-                height: 118,
+                height: 1 * height + STEP_BUTTON_UNIT.height,
+            }
+        ], [
+            {
+                id: 4,
+                recipe_name: "きんぴらごぼう",
+                description: "下ごしらえ",
+                top: 0 * height,
+                height: 0 * height + STEP_BUTTON_UNIT.height,
+            },
+            {
+                id: 1,
+                recipe_name: "ブロッコリー",
+                description: "電子レンジで温める",
+                top: 4 * height,
+                height: 0 * height + STEP_BUTTON_UNIT.height,
             }
         ]
     ];
 
+    const resource_kind = resource_steps.length;
 
     const time_label_count = 12;
     const time_label_values = Array.from(Array(time_label_count).keys()).map(x => x * unit_of_time);

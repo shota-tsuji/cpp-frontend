@@ -1,5 +1,9 @@
 import {Button, Text} from '@mantine/core';
 
+export const STEP_BUTTON_UNIT = {
+    'height': 58,
+};
+
 export type StepButtonProps = {
     id: number;
     recipe_name: string;
