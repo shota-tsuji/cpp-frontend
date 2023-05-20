@@ -3,6 +3,7 @@ import '../App.css';
 import {Route, Routes} from "react-router-dom";
 import RecipeRouter from "./recipes/RecipeRoutes";
 import StepButton, {STEP_BUTTON_UNIT, StepButtonProps} from "../features/process/StepButton";
+import ResourceRouter from "./resources/ResourceRoutes";
 
 // use wildcard pattern to segregate and match to multiple nested routes.
 // https://reactrouter.com/en/main/route/route#splats
@@ -11,6 +12,7 @@ export default function MainRouter() {
     return (
         <Routes>
             <Route path="/recipes/*" element={<RecipeRouter/>}/>
+            <Route path="/resources/*" element={<ResourceRouter/>}/>
             <Route path="/process/*" element={<ProcessGrid/>}/>
         </Routes>
     );
