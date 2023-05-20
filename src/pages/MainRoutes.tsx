@@ -10,7 +10,6 @@ import StepButton, {STEP_BUTTON_UNIT, StepButtonProps} from "../features/process
 export default function MainRouter() {
     return (
         <Routes>
-            <Route path="/" element={<ProcessGrid/>}/>
             <Route path="/recipes/*" element={<RecipeRouter/>}/>
             <Route path="/process/*" element={<ProcessGrid/>}/>
         </Routes>
@@ -97,7 +96,7 @@ function ProcessGrid() {
                 recipe_name: "カレー",
                 description: "煮込む",
                 top: 1 * height,
-                height: 0* height + STEP_BUTTON_UNIT.height,
+                height: 0 * height + STEP_BUTTON_UNIT.height,
             },
             {
                 id: 3,
