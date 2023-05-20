@@ -1,16 +1,8 @@
 import React from "react";
-import {Step, useRecipeDetailQuery} from "../../generated/graphql";
+import {useRecipeDetailQuery} from "../../generated/graphql";
 import {Route, Routes, useParams} from "react-router-dom";
 import RecipeDetailEdit from "../../features/recipes/RecipeDetailEdit";
-import {Timeline, TimelineItem, Title, Center} from "@mantine/core";
-
-function TimelineItemList(props: Step) {
-    return (
-        <TimelineItem title={props.description}>
-            {props.duration}
-        </TimelineItem>
-    );
-}
+import {Center, Timeline, Title} from "@mantine/core";
 
 export default function RecipeDetailPage() {
     //const { id } = useParams<{ te: string }>();
