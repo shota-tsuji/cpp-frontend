@@ -25,7 +25,8 @@ type ResourceColumnProps = {
 }
 
 function ResourceColumn(props: ResourceColumnProps) {
-    const step_buttons = props.steps.map((step) => <StepButton top={step.top} left={step.left} height={step.height}
+    const step_buttons = props.steps.map((step) => <StepButton id={step.id} recipe_name={step.recipe_name}
+                                                               top={step.top} height={step.height}
                                                                description={step.description}/>);
     return (
         <div className="process-step" style={{top: props.top, left: props.left, height: props.height, width: 260}}>
@@ -69,41 +70,46 @@ function TimeHorizontalBar(props: TimeHorizontalBarProps) {
 }
 
 function ProcessGrid() {
-    const resource_steps = [
-        [
-            {
-                top: 0,
-                left: 0,
-                height: 58,
-                description: "Step1"
-            },
-            {
-                top: 60,
-                left: 0,
-                height: 58,
-                description: "Step2"
-            }
-        ], [
-            {
-                top: 60,
-                left: 0,
-                height: 58,
-                description: "Step3"
-            },
-            {
-                top: 120,
-                left: 0,
-                height: 118,
-                description: "Step2"
-            }
-        ]
-    ];
-
     const height = 60;
     const width = 260;
     const left_pad = 30;
     const resource_kind = 2;
     const unit_of_time = 5;
+
+    const resource_steps = [
+        [
+            {
+                id: 0,
+                recipe_name: "カレー",
+                description: "野菜を切る",
+                top: 0 * height,
+                height: 58,
+            },
+            {
+                id: 1,
+                recipe_name: "きんぴらごぼう",
+                description: "野菜を切る",
+                top: 1 * height,
+                height: 58,
+            }
+        ], [
+            {
+                id: 2,
+                recipe_name: "カレー",
+                description: "煮込む",
+                top: 1 * height,
+                height: 58,
+            },
+            {
+                id: 3,
+                recipe_name: "きんぴらごぼう",
+                description: "柔らかくなるまで煮る",
+                top: 2 * height,
+                height: 118,
+            }
+        ]
+    ];
+
 
     const time_label_count = 12;
     const time_label_values = Array.from(Array(time_label_count).keys()).map(x => x * unit_of_time);
