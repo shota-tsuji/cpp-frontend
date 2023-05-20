@@ -1,5 +1,5 @@
 import React from "react";
-import { Redirect, Route, Routes } from "react-router-dom";
+import {Route, Routes} from "react-router-dom";
 import RecipeIndexPage from "./RecipeIndexPage";
 import RecipeDetailPage from "./recipeDetailPage";
 
@@ -7,13 +7,13 @@ import RecipeDetailPage from "./recipeDetailPage";
 // https://reactrouter.com/en/main/route/route#index
 export default function RecipeRouter() {
     return (
-            <React.Fragment>
+        <React.Fragment>
             <div>
-            <Routes>
-            <Route index element={<RecipeIndexPage />} />
-            <Route path=":recipeId/*" element={<RecipeDetailPage />} />
-            </Routes>
+                <Routes>
+                    <Route index element={<RecipeIndexPage/>}/>
+                    <Route path=":recipeId/*" element={<RecipeDetailPage/>}/>
+                </Routes>
             </div>
-            </React.Fragment>
-            );
+        </React.Fragment>
+    );
 }

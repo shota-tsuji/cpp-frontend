@@ -17,8 +17,9 @@ type Mutation {
 }
 
 type Query {
-	recipeDetail(id: ID!): RecipeDetail!
-	recipes: [Recipe!]!
+        recipeDetail(id: ID!): RecipeDetail!
+        recipes: [Recipe!]!
+        resources: [Resource!]!
 }
 
 type Recipe {
@@ -32,6 +33,12 @@ type RecipeDetail {
 	title: String!
 	description: String!
 	steps: [Step!]!
+}
+
+type Resource {
+        id: Int!
+        name: String!
+        amount: Int!
 }
 
 type Step {
