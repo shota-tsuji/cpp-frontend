@@ -1,7 +1,7 @@
 import React from "react";
 import {useResourcesQuery} from "../../generated/graphql";
 import {Link} from "react-router-dom";
-import {Table, Title} from "@mantine/core";
+import {Paper, Table, Title} from "@mantine/core";
 
 export default function ResourceIndexPage() {
     const [result, _reexecuteQuery] = useResourcesQuery();
@@ -13,25 +13,27 @@ export default function ResourceIndexPage() {
     }
     if (fetching) return <p>Loading...</p>;
 
-    const resources = data!.resources.map(resource => (
+    const resourceList = data!.resources.map(resource => (
         <tr key={resource.id}>
-            <td>
-                <Link to={resource.id}>{resource.name}</Link>
-            </td>
+            <td><Link to={resource.id}>{resource.name}</Link></td>
+            <td>{resource.amount}</td>
         </tr>
     ));
 
     return (
         <React.Fragment>
             <Title order={1} mt="auto">Resources</Title>
-            <Table>
-                <thread>
-                <tr>
-                    <th>Name</th>
-                </tr>
-                </thread>
-                <tbody>{resources}</tbody>
+            <Paper shadow="xs" mt="md" p="lg">
+            <Table highlightOnHover>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Amount</th>
+                    </tr>
+                </thead>
+                <tbody>{resourceList}</tbody>
             </Table>
+            </Paper>
         </React.Fragment>
     );
 }
