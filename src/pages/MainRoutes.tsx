@@ -123,7 +123,7 @@ function ProcessGrid() {
                                   steps={resource_steps[i]}/>);
 
     return (
-        <div className="recipe-grid" style={{height: "100%"}}>
+        <div className="recipe-grid">
             <div className="process-bar-side">
                 {time_label_list}
             </div>

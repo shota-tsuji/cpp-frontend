@@ -1,17 +1,20 @@
+/* height is needed to display main content */
 #root {
-  max-width: 1280px;
+  height: 640px;
   width: 1280px;
-  max-height: 1280px;
-  height: 1280px;
+  max-width: 1280px;
   margin: auto;
   text-align: center;
 }
 
 .recipe-grid {
-  width: 50%;
-  margin: auto;
-  position: relative;
+  height: 80%;
+  width: 70%;
+  margin: 10% 15%;
+  position: absolute;
   text-align: center;
+  overflow: auto; /* if height > parent height, show scroll */
+  box-sizing: border-box;
 }
 
 .logo {
