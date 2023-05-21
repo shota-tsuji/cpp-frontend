@@ -1,16 +1,30 @@
-import React from "react";
-import {useResourcesQuery} from "../../generated/graphql";
+import React, {useMemo} from "react";
+import {Resource, useResourcesQuery} from "../../generated/graphql";
 import {useDisclosure} from '@mantine/hooks';
-import {Button, Paper, Group, Modal, Table, Title} from "@mantine/core";
-import {useForm} from "@mantine/form";
+import {Button, Paper, Title} from "@mantine/core";
+import type {MRT_ColumnDef} from 'mantine-react-table';
+import {MantineReactTable} from 'mantine-react-table';
 
 export default function ResourceIndexPage() {
     const [opened, {open, close}] = useDisclosure(false);
-    const form = useForm({
-        initialValues: {
-            amount: 1,
-        },
-    });
+    const columns = useMemo<MRT_ColumnDef<Resource>[]>(
+        () => [
+            {
+                accessorKey: 'id',
+                header: 'Id',
+            },
+            {
+                accessorKey: 'name',
+                header: 'Name',
+                mantineTableHeadCellProps: {sx: {color: 'green'}}, //custom props
+            },
+            {
+                accessorKey: 'amount',
+                header: 'Amount',
+            }
+        ],
+        [],
+    );
 
     const [result, _reexecuteQuery] = useResourcesQuery();
     const {data, fetching, error} = result;
@@ -20,6 +34,8 @@ export default function ResourceIndexPage() {
         return <>{JSON.stringify(error)}</>;
     }
     if (fetching) return <p>Loading...</p>;
+
+    const resources = data!.resources;
 
     const resourceList = data!.resources.map(resource => (
         <tr key={resource.id}>
@@ -35,16 +51,13 @@ export default function ResourceIndexPage() {
         <React.Fragment>
             <Title order={1} mt="auto">Resources</Title>
             <Paper shadow="xs" mt="md" p="lg">
-                <Table highlightOnHover>
-                    <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Amount</th>
-                        <th>Action</th>
-                    </tr>
-                    </thead>
-                    <tbody>{resourceList}</tbody>
-                </Table>
+                <MantineReactTable
+                    columns={columns}
+                    data={resources}
+                    enableRowSelection //enable some features
+                    enableColumnOrdering
+                    enableGlobalFilter={false} //turn off a feature
+                />
             </Paper>
         </React.Fragment>
     );
