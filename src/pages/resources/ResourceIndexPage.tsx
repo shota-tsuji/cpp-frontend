@@ -1,7 +1,8 @@
 import React, {useMemo, useState} from "react";
+import { useNavigate } from "react-router-dom";
 import {Resource, useResourcesQuery} from "../../generated/graphql";
 import {useDisclosure} from '@mantine/hooks';
-import {Box, Button, Dialog, Group, Menu, NumberInput, Paper, TextInput, Title} from "@mantine/core";
+import {ActionIcon, Box, Button, Dialog, Group, Menu, NumberInput, Paper, TextInput, Title, Tooltip} from "@mantine/core";
 import type {MRT_ColumnDef} from 'mantine-react-table';
 import {MantineReactTable} from 'mantine-react-table';
 import {useForm} from "@mantine/form";
@@ -9,6 +10,8 @@ import {IconEdit} from '@tabler/icons-react';
 
 export default function ResourceIndexPage() {
     const [opened, {open, close}] = useDisclosure(false);
+    const navigate = useNavigate();
+    const [formValue, setFormValue] = useState({id: 0, name: "abc", amount: 1});
     const columns = useMemo<MRT_ColumnDef<Resource>[]>(
         () => [
             {
@@ -54,10 +57,29 @@ export default function ResourceIndexPage() {
                     enableColumnOrdering
                     enableGlobalFilter={false} //turn off a feature
                     renderRowActionMenuItems={({row}) => [<Menu.Item icon={<IconEdit/>} key={1} onClick={() => {
+                        setFormValue({id: row.id, name: row.name, amount: row.amount});
                         open();
                     }}>Edit</Menu.Item>]}
+                    onEditingRowSave={() => console.info('submitted')}
+                    renderRowActions={({ row, table }) => (
+                        <Box sx={{ display: 'flex', gap: '16px' }}>
+                            <Tooltip withArrow position="left" label="Edit">
+                                <ActionIcon onClick={() => {
+                                    console.info(row);
+                                    navigate(`/resources/${row.id}/edit`)
+                                    {/*
+                                    navigate("/recipes/");
+                                    open();
+                                    setFormValue({id: row.id, name: row.name, amount: row.amount});
+                                    */}
+                                }}>
+                                    <IconEdit />
+                                </ActionIcon>
+                            </Tooltip>
+                        </Box>
+                    )}
                 />
-                <EditResourceDialog columns={columns} onClose={close} onSubmit={handleSubmit} open={opened} />
+                <EditResourceDialog columns={columns} formValue={formValue} onClose={close} onSubmit={handleSubmit} open={opened} />
             <ResourceEdit id={0} name="aaa" amount={10}/>
         </React.Fragment>
     );
@@ -68,9 +90,10 @@ interface EditResourceDialogProps {
     onClose: () => void;
     onSubmit: (values: Resource) => void;
     open: boolean;
+    formValue: Resource;
 }
 
-export const EditResourceDialog = ({columns, onClose, onSubmit, open}: EditResourceDialogProps) => {
+export const EditResourceDialog = ({columns, onClose, onSubmit, open, formValue}: EditResourceDialogProps) => {
     const [values, setValues] = useState<any>(() =>
         columns.reduce((acc, column) => {
             acc[column.accessorKey ?? ''] = '';
@@ -79,8 +102,8 @@ export const EditResourceDialog = ({columns, onClose, onSubmit, open}: EditResou
     );
     const form = useForm({
         initialValues: {
-            name: values.name,
-            amount: values.amount,
+            name: formValue.name,
+            amount: formValue.amount,
         }
     });
     const handleSubmit = () => {
@@ -92,7 +115,7 @@ export const EditResourceDialog = ({columns, onClose, onSubmit, open}: EditResou
     return (
             <Box maw={300} mx="auto">
                 <Dialog opened={open}>
-                <Title ta="center">Create New Account</Title>
+                <Title ta="center">Resource: {formValue.id}</Title>
                 <form onSubmit={handleSubmit}>
                     <TextInput
                         withAsterisk
