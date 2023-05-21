@@ -4,8 +4,10 @@ import {Resource, useResourcesQuery} from "../../generated/graphql";
 import {Box, Button, Dialog, Group, NumberInput, Paper, Table, TextInput, Title} from "@mantine/core";
 import type {MRT_ColumnDef} from 'mantine-react-table';
 import {useForm} from "@mantine/form";
+import { useNavigate } from "react-router-dom";
 
 export default function ResourceIndexPage() {
+    const navigate = useNavigate();
     const [result, _reexecuteQuery] = useResourcesQuery();
     const {data, fetching, error} = result;
     console.log(JSON.stringify({fetching, data, error}, null, 2));
@@ -27,6 +29,7 @@ export default function ResourceIndexPage() {
     return (
         <React.Fragment>
             <Title order={1} mt="auto">Resources</Title>
+            <Button onClick={() => {navigate(`/resources/new`);}}></Button>
             <Paper shadow="xs" mt="md" p="lg">
                 <Table highlightOnHover>
                     <thead>
