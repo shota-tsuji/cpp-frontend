@@ -29,7 +29,7 @@ export default function ResourceIndexPage() {
     return (
         <React.Fragment>
             <Title order={1} mt="auto">Resources</Title>
-            <Button onClick={() => {navigate(`/resources/new`);}}></Button>
+            <Button onClick={() => {navigate(`/resources/new`);}}>Create</Button>
             <Paper shadow="xs" mt="md" p="lg">
                 <Table highlightOnHover>
                     <thead>
