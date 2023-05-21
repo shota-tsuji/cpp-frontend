@@ -1,7 +1,7 @@
-import React, {useMemo} from "react";
+import React, {useMemo, useState} from "react";
 import {Resource, useResourcesQuery} from "../../generated/graphql";
 import {useDisclosure} from '@mantine/hooks';
-import {Box, Button, Group, Menu, NumberInput, Paper, TextInput, Title} from "@mantine/core";
+import {Box, Button, Dialog, Group, Menu, NumberInput, Paper, TextInput, Title} from "@mantine/core";
 import type {MRT_ColumnDef} from 'mantine-react-table';
 import {MantineReactTable} from 'mantine-react-table';
 import {useForm} from "@mantine/form";
@@ -39,20 +39,13 @@ export default function ResourceIndexPage() {
 
     const resources = data!.resources;
 
-    const resourceList = data!.resources.map(resource => (
-        <tr key={resource.id}>
-            <td>{resource.name}</td>
-            <td>{resource.amount}</td>
-            <td>
-                <Button onClick={open}>Open modal</Button>
-            </td>
-        </tr>
-    ));
+    const handleSubmit = ((resource: Resource) => {
+        console.info('submitted');
+    });
 
     return (
         <React.Fragment>
             <Title order={1} mt="auto">Resources</Title>
-            <Paper shadow="xs" mt="md" p="lg">
                 <MantineReactTable
                     columns={columns}
                     data={resources}
@@ -61,12 +54,66 @@ export default function ResourceIndexPage() {
                     enableColumnOrdering
                     enableGlobalFilter={false} //turn off a feature
                     renderRowActionMenuItems={({row}) => [<Menu.Item icon={<IconEdit/>} key={1} onClick={() => {
-                        console.info('View Profile', row);
+                        open();
                     }}>Edit</Menu.Item>]}
                 />
-            </Paper>
+                <EditResourceDialog columns={columns} onClose={close} onSubmit={handleSubmit} open={opened} />
             <ResourceEdit id={0} name="aaa" amount={10}/>
         </React.Fragment>
+    );
+}
+
+interface EditResourceDialogProps {
+    columns: MRT_ColumnDef<Resource>[];
+    onClose: () => void;
+    onSubmit: (values: Resource) => void;
+    open: boolean;
+}
+
+export const EditResourceDialog = ({columns, onClose, onSubmit, open}: EditResourceDialogProps) => {
+    const [values, setValues] = useState<any>(() =>
+        columns.reduce((acc, column) => {
+            acc[column.accessorKey ?? ''] = '';
+            return acc;
+        }, {} as any),
+    );
+    const form = useForm({
+        initialValues: {
+            name: values.name,
+            amount: values.amount,
+        }
+    });
+    const handleSubmit = () => {
+        //put your validation logic here
+        onSubmit(values);
+        onClose();
+    };
+
+    return (
+            <Box maw={300} mx="auto">
+                <Dialog opened={open}>
+                <Title ta="center">Create New Account</Title>
+                <form onSubmit={handleSubmit}>
+                    <TextInput
+                        withAsterisk
+                        label="Name"
+                        placeholder="your@email.com"
+                        {...form.getInputProps('name')}
+                    />
+
+                    <NumberInput
+                        withAsterisk
+                        mt="md"
+                        label="Amount"
+                        {...form.getInputProps('amount')}
+                    />
+
+                    <Group position="right" mt="md">
+                        <Button type="submit">Submit</Button>
+                    </Group>
+                </form>
+                </Dialog>
+            </Box>
     );
 }
 
@@ -85,7 +132,7 @@ function ResourceEdit({id, name, amount}: ResourceEditProps) {
     });
     return (
         <Box maw={300} mx="auto">
-            <form onSubmit={form.onSubmit((values) => console.log(values))}>
+            <form onSubmit={(e) => e.preventDefault()}>
                 <TextInput
                     withAsterisk
                     label="Name"
