@@ -29,11 +29,6 @@ export default function RecipeDetailPage() {
                     </Timeline.Item>))}
                 </Timeline>
             </Center>
-            <div>
-                <Routes>
-                    <Route path="edit" element={<RecipeDetailEdit/>}/>
-                </Routes>
-            </div>
         </React.Fragment>
     );
 }

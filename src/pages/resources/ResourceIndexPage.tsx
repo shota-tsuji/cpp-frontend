@@ -1,17 +1,28 @@
-import React from "react";
-import {useResourcesQuery} from "../../generated/graphql";
+import React, {useMemo, useState} from "react";
+import {Link, useNavigate} from "react-router-dom";
+import {Resource, useResourcesQuery} from "../../generated/graphql";
 import {useDisclosure} from '@mantine/hooks';
-import {Button, Paper, Group, Modal, Table, Title} from "@mantine/core";
+import { redirect } from "react-router-dom";
+import {
+    ActionIcon,
+    Box,
+    Button,
+    Dialog,
+    Group,
+    Menu,
+    NumberInput,
+    Paper,
+    Table,
+    TextInput,
+    Title,
+    Tooltip
+} from "@mantine/core";
+import type {MRT_ColumnDef} from 'mantine-react-table';
+import {MantineReactTable} from 'mantine-react-table';
 import {useForm} from "@mantine/form";
+import {IconEdit} from '@tabler/icons-react';
 
 export default function ResourceIndexPage() {
-    const [opened, {open, close}] = useDisclosure(false);
-    const form = useForm({
-        initialValues: {
-            amount: 1,
-        },
-    });
-
     const [result, _reexecuteQuery] = useResourcesQuery();
     const {data, fetching, error} = result;
     console.log(JSON.stringify({fetching, data, error}, null, 2));
@@ -23,11 +34,10 @@ export default function ResourceIndexPage() {
 
     const resourceList = data!.resources.map(resource => (
         <tr key={resource.id}>
-            <td>{resource.name}</td>
-            <td>{resource.amount}</td>
             <td>
-                <Button onClick={open}>Open modal</Button>
+                <Link to={resource.id.toString()}>{resource.name}</Link>
             </td>
+            <td>{resource.amount}</td>
         </tr>
     ));
 
@@ -40,12 +50,104 @@ export default function ResourceIndexPage() {
                     <tr>
                         <th>Name</th>
                         <th>Amount</th>
-                        <th>Action</th>
                     </tr>
                     </thead>
                     <tbody>{resourceList}</tbody>
                 </Table>
             </Paper>
         </React.Fragment>
+    );
+}
+
+interface EditResourceDialogProps {
+    columns: MRT_ColumnDef<Resource>[];
+    onClose: () => void;
+    onSubmit: (values: Resource) => void;
+    open: boolean;
+    formValue: Resource;
+}
+
+export const EditResourceDialog = ({columns, onClose, onSubmit, open, formValue}: EditResourceDialogProps) => {
+    const [values, setValues] = useState<any>(() =>
+        columns.reduce((acc, column) => {
+            acc[column.accessorKey ?? ''] = '';
+            return acc;
+        }, {} as any),
+    );
+    const form = useForm({
+        initialValues: {
+            name: formValue.name,
+            amount: formValue.amount,
+        }
+    });
+    const handleSubmit = () => {
+        //put your validation logic here
+        onSubmit(values);
+        onClose();
+    };
+
+    return (
+            <Box maw={300} mx="auto">
+                <Dialog opened={open}>
+                <Title ta="center">Resource: {formValue.id}</Title>
+                <form onSubmit={handleSubmit}>
+                    <TextInput
+                        withAsterisk
+                        label="Name"
+                        placeholder="your@email.com"
+                        {...form.getInputProps('name')}
+                    />
+
+                    <NumberInput
+                        withAsterisk
+                        mt="md"
+                        label="Amount"
+                        {...form.getInputProps('amount')}
+                    />
+
+                    <Group position="right" mt="md">
+                        <Button type="submit">Submit</Button>
+                    </Group>
+                </form>
+                </Dialog>
+            </Box>
+    );
+}
+
+type ResourceEditProps = {
+    id: number;
+    name: string;
+    amount: number;
+}
+
+function ResourceEdit({id, name, amount}: ResourceEditProps) {
+    const form = useForm({
+        initialValues: {
+            name: name,
+            amount: amount,
+        }
+    });
+    return (
+        <Box maw={300} mx="auto">
+            <form onSubmit={(e) => e.preventDefault()}>
+                <TextInput
+                    withAsterisk
+                    label="Name"
+                    placeholder="your@email.com"
+                    {...form.getInputProps('name')}
+                />
+
+                <NumberInput
+                    withAsterisk
+                    mt="md"
+                    label="Amount"
+                    {...form.getInputProps('amount')}
+                />
+
+                <Group position="right" mt="md">
+                    <Button type="submit">Submit</Button>
+                </Group>
+            </form>
+        </Box>
     );
 }
