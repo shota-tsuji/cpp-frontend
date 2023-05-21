@@ -1,36 +1,28 @@
 import React, {useMemo, useState} from "react";
-import { useNavigate } from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {Resource, useResourcesQuery} from "../../generated/graphql";
 import {useDisclosure} from '@mantine/hooks';
-import {ActionIcon, Box, Button, Dialog, Group, Menu, NumberInput, Paper, TextInput, Title, Tooltip} from "@mantine/core";
+import { redirect } from "react-router-dom";
+import {
+    ActionIcon,
+    Box,
+    Button,
+    Dialog,
+    Group,
+    Menu,
+    NumberInput,
+    Paper,
+    Table,
+    TextInput,
+    Title,
+    Tooltip
+} from "@mantine/core";
 import type {MRT_ColumnDef} from 'mantine-react-table';
 import {MantineReactTable} from 'mantine-react-table';
 import {useForm} from "@mantine/form";
 import {IconEdit} from '@tabler/icons-react';
 
 export default function ResourceIndexPage() {
-    const [opened, {open, close}] = useDisclosure(false);
-    const navigate = useNavigate();
-    const [formValue, setFormValue] = useState({id: 0, name: "abc", amount: 1});
-    const columns = useMemo<MRT_ColumnDef<Resource>[]>(
-        () => [
-            {
-                accessorKey: 'id',
-                header: 'Id',
-            },
-            {
-                accessorKey: 'name',
-                header: 'Name',
-                mantineTableHeadCellProps: {sx: {color: 'green'}}, //custom props
-            },
-            {
-                accessorKey: 'amount',
-                header: 'Amount',
-            }
-        ],
-        [],
-    );
-
     const [result, _reexecuteQuery] = useResourcesQuery();
     const {data, fetching, error} = result;
     console.log(JSON.stringify({fetching, data, error}, null, 2));
@@ -40,47 +32,29 @@ export default function ResourceIndexPage() {
     }
     if (fetching) return <p>Loading...</p>;
 
-    const resources = data!.resources;
-
-    const handleSubmit = ((resource: Resource) => {
-        console.info('submitted');
-    });
+    const resourceList = data!.resources.map(resource => (
+        <tr key={resource.id}>
+            <td>
+                <Link to={resource.id.toString()}>{resource.name}</Link>
+            </td>
+            <td>{resource.amount}</td>
+        </tr>
+    ));
 
     return (
         <React.Fragment>
             <Title order={1} mt="auto">Resources</Title>
-                <MantineReactTable
-                    columns={columns}
-                    data={resources}
-                    enableRowActions
-                    enableRowSelection //enable some features
-                    enableColumnOrdering
-                    enableGlobalFilter={false} //turn off a feature
-                    renderRowActionMenuItems={({row}) => [<Menu.Item icon={<IconEdit/>} key={1} onClick={() => {
-                        setFormValue({id: row.id, name: row.name, amount: row.amount});
-                        open();
-                    }}>Edit</Menu.Item>]}
-                    onEditingRowSave={() => console.info('submitted')}
-                    renderRowActions={({ row, table }) => (
-                        <Box sx={{ display: 'flex', gap: '16px' }}>
-                            <Tooltip withArrow position="left" label="Edit">
-                                <ActionIcon onClick={() => {
-                                    console.info(row);
-                                    navigate(`/resources/${row.id}/edit`)
-                                    {/*
-                                    navigate("/recipes/");
-                                    open();
-                                    setFormValue({id: row.id, name: row.name, amount: row.amount});
-                                    */}
-                                }}>
-                                    <IconEdit />
-                                </ActionIcon>
-                            </Tooltip>
-                        </Box>
-                    )}
-                />
-                <EditResourceDialog columns={columns} formValue={formValue} onClose={close} onSubmit={handleSubmit} open={opened} />
-            <ResourceEdit id={0} name="aaa" amount={10}/>
+            <Paper shadow="xs" mt="md" p="lg">
+                <Table highlightOnHover>
+                    <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Amount</th>
+                    </tr>
+                    </thead>
+                    <tbody>{resourceList}</tbody>
+                </Table>
+            </Paper>
         </React.Fragment>
     );
 }

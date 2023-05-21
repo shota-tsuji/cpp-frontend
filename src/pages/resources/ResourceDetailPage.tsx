@@ -23,11 +23,6 @@ export default function ResourceDetailPage() {
             <Center>
                 <Text>Amount: {amount}</Text>
             </Center>
-            <div>
-                <Routes>
-                    <Route path="edit" element={<ResourceDetailEdit/>}/>
-                </Routes>
-            </div>
         </React.Fragment>
     );
 }
