@@ -17,9 +17,16 @@ input CreateResourceInput {
     amount: Int!
 }
 
+input UpdateResourceInput {
+	id: Int!
+	name: String!
+	amount: Int!
+}
+
 type Mutation {
 	createRecipeDetail(recipeDetailData: CreateRecipeDetailInput!): RecipeDetail!
 	createResource(resourceData: CreateResourceInput!): Resource!
+	updateResource(resourceData: UpdateResourceInput!): Resource!
 }
 
 type Query {
