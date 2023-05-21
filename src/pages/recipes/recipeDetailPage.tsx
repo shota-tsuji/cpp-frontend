@@ -1,7 +1,6 @@
 import React from "react";
 import {useRecipeDetailQuery} from "../../generated/graphql";
-import {Route, Routes, useParams} from "react-router-dom";
-import RecipeDetailEdit from "../../features/recipes/RecipeDetailEdit";
+import {useParams} from "react-router-dom";
 import {Center, Timeline, Title} from "@mantine/core";
 
 export default function RecipeDetailPage() {
@@ -16,12 +15,12 @@ export default function RecipeDetailPage() {
     if (fetching) return <p>Loading...</p>;
 
     const recipeDetail = data!.recipeDetail;
-    const {title, description, steps, ...rest} = recipeDetail;
+    const {title, description, steps} = recipeDetail;
 
     return (
         <React.Fragment>
-            <Title order={1} mt="auto">{recipeDetail.title}</Title>
-            <Title order={2}>{recipeDetail.description}</Title>
+            <Title order={1} mt="auto">{title}</Title>
+            <Title order={2}>{description}</Title>
             <Center>
                 <Timeline active={1} bulletSize={32} lineWidth={4}>
                     {steps.map(step => (<Timeline.Item title={step.description} key={step.id}>

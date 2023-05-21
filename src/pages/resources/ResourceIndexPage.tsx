@@ -1,26 +1,9 @@
-import React, {useMemo, useState} from "react";
-import {Link, useNavigate} from "react-router-dom";
+import React, {useState} from "react";
+import {Link} from "react-router-dom";
 import {Resource, useResourcesQuery} from "../../generated/graphql";
-import {useDisclosure} from '@mantine/hooks';
-import { redirect } from "react-router-dom";
-import {
-    ActionIcon,
-    Box,
-    Button,
-    Dialog,
-    Group,
-    Menu,
-    NumberInput,
-    Paper,
-    Table,
-    TextInput,
-    Title,
-    Tooltip
-} from "@mantine/core";
+import {Box, Button, Dialog, Group, NumberInput, Paper, Table, TextInput, Title} from "@mantine/core";
 import type {MRT_ColumnDef} from 'mantine-react-table';
-import {MantineReactTable} from 'mantine-react-table';
 import {useForm} from "@mantine/form";
-import {IconEdit} from '@tabler/icons-react';
 
 export default function ResourceIndexPage() {
     const [result, _reexecuteQuery] = useResourcesQuery();
@@ -87,8 +70,8 @@ export const EditResourceDialog = ({columns, onClose, onSubmit, open, formValue}
     };
 
     return (
-            <Box maw={300} mx="auto">
-                <Dialog opened={open}>
+        <Box maw={300} mx="auto">
+            <Dialog opened={open}>
                 <Title ta="center">Resource: {formValue.id}</Title>
                 <form onSubmit={handleSubmit}>
                     <TextInput
@@ -109,8 +92,8 @@ export const EditResourceDialog = ({columns, onClose, onSubmit, open, formValue}
                         <Button type="submit">Submit</Button>
                     </Group>
                 </form>
-                </Dialog>
-            </Box>
+            </Dialog>
+        </Box>
     );
 }
 
