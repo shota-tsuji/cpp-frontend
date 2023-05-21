@@ -1,28 +1,13 @@
-import React, {useMemo, useState} from "react";
-import {Link, useNavigate} from "react-router-dom";
+import React, {useState} from "react";
+import {Link} from "react-router-dom";
 import {Resource, useResourcesQuery} from "../../generated/graphql";
-import {useDisclosure} from '@mantine/hooks';
-import { redirect } from "react-router-dom";
-import {
-    ActionIcon,
-    Box,
-    Button,
-    Dialog,
-    Group,
-    Menu,
-    NumberInput,
-    Paper,
-    Table,
-    TextInput,
-    Title,
-    Tooltip
-} from "@mantine/core";
+import {Box, Button, Dialog, Group, NumberInput, Paper, Table, TextInput, Title} from "@mantine/core";
 import type {MRT_ColumnDef} from 'mantine-react-table';
-import {MantineReactTable} from 'mantine-react-table';
 import {useForm} from "@mantine/form";
-import {IconEdit} from '@tabler/icons-react';
+import { useNavigate } from "react-router-dom";
 
 export default function ResourceIndexPage() {
+    const navigate = useNavigate();
     const [result, _reexecuteQuery] = useResourcesQuery();
     const {data, fetching, error} = result;
     console.log(JSON.stringify({fetching, data, error}, null, 2));
@@ -44,6 +29,7 @@ export default function ResourceIndexPage() {
     return (
         <React.Fragment>
             <Title order={1} mt="auto">Resources</Title>
+            <Button onClick={() => {navigate(`/resources/new`);}}>Create</Button>
             <Paper shadow="xs" mt="md" p="lg">
                 <Table highlightOnHover>
                     <thead>
@@ -87,8 +73,8 @@ export const EditResourceDialog = ({columns, onClose, onSubmit, open, formValue}
     };
 
     return (
-            <Box maw={300} mx="auto">
-                <Dialog opened={open}>
+        <Box maw={300} mx="auto">
+            <Dialog opened={open}>
                 <Title ta="center">Resource: {formValue.id}</Title>
                 <form onSubmit={handleSubmit}>
                     <TextInput
@@ -109,8 +95,8 @@ export const EditResourceDialog = ({columns, onClose, onSubmit, open, formValue}
                         <Button type="submit">Submit</Button>
                     </Group>
                 </form>
-                </Dialog>
-            </Box>
+            </Dialog>
+        </Box>
     );
 }
 

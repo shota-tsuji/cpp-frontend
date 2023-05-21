@@ -2,6 +2,7 @@ import {Resource, useResourceQuery, useUpdateResourceMutation} from "../../gener
 import {useParams} from "react-router-dom";
 import {Box, Button, Group, NumberInput, TextInput, Title} from "@mantine/core";
 import {useForm} from "@mantine/form";
+import { useNavigate } from "react-router-dom";
 
 export default function ResourceDetailEdit() {
     const {resourceId} = useParams();
@@ -24,7 +25,8 @@ export default function ResourceDetailEdit() {
 }
 
 function ResourceEdit({id, name, amount}: Resource) {
-    const [_updateBookResult, updateResource] = useUpdateResourceMutation();
+    const navigate = useNavigate();
+    const [_updateResourceResult, updateResource] = useUpdateResourceMutation();
 
     const form = useForm({
         initialValues: {
@@ -38,6 +40,7 @@ function ResourceEdit({id, name, amount}: Resource) {
         //onClose();
         console.info(values);
         await updateResource({resourceData: {id: values.id, name: values.name, amount: values.amount}});
+        navigate(`/resources/`);
     };
 
     return (

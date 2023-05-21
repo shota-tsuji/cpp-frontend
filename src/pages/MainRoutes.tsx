@@ -53,7 +53,7 @@ type TimeLabelProps = {
 
 function TimeLabel(props: TimeLabelProps) {
     return (
-        <div style={{pos: "absolute", top: 0, left: 0, width: 80, height: 60}}>
+        <div style={{top: 0, left: 0, width: 80, height: 60}}>
             <span>{props.time}min</span>
         </div>
     );
