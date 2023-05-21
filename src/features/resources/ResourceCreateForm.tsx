@@ -1,8 +1,10 @@
 import {useCreateResourceMutation} from "../../generated/graphql";
 import {useForm} from "@mantine/form";
 import {Box, Button, Group, NumberInput, TextInput, Title} from "@mantine/core";
+import { useNavigate } from "react-router-dom";
 
 export default function ResourceCreateForm() {
+    const navigate = useNavigate();
     const [_createResourceResult, createResource] = useCreateResourceMutation();
 
     const form = useForm({
@@ -15,6 +17,7 @@ export default function ResourceCreateForm() {
     const handleSubmit = async (values: { name: string; amount: number; }) => {
         console.info(values);
         await createResource({resourceData: {name: values.name, amount: values.amount}});
+        navigate(`/resources/`);
     };
 
     return (
