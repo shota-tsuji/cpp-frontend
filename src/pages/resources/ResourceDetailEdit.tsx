@@ -1,11 +1,11 @@
-import {Resource, useResourceQuery} from "../../generated/graphql";
+import {Resource, useResourceQuery, useUpdateResourceMutation} from "../../generated/graphql";
 import {useParams} from "react-router-dom";
 import {Box, Button, Group, NumberInput, TextInput, Title} from "@mantine/core";
 import {useForm} from "@mantine/form";
 
 export default function ResourceDetailEdit() {
-    const { resourceId } = useParams();
-    const [result, _reexecuteQuery] = useResourceQuery({ variables: { resourceId: resourceId! } });
+    const {resourceId} = useParams();
+    const [result, _reexecuteQuery] = useResourceQuery({variables: {resourceId: resourceId!}});
     const {data, fetching, error} = result;
 
     if (error != null) {
@@ -24,6 +24,8 @@ export default function ResourceDetailEdit() {
 }
 
 function ResourceEdit({id, name, amount}: Resource) {
+    const [_updateBookResult, updateResource] = useUpdateResourceMutation();
+
     const form = useForm({
         initialValues: {
             name: name,
@@ -31,16 +33,21 @@ function ResourceEdit({id, name, amount}: Resource) {
         }
     });
 
-    const handleSubmit = () => {
+    const handleSubmit = async (values: Resource) => {
         //put your validation logic here
         //onClose();
-        console.info('submitted');
+        console.info(values);
+        await updateResource({resourceData: {id: values.id, name: values.name, amount: values.amount}});
     };
 
     return (
         <Box maw={300} mx="auto">
             <Title order={1} mt="auto">{id}:{name}:{amount}</Title>
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={form.onSubmit(async (values) => {
+                    const resource = {id: id, name: values.name, amount: values.amount};
+                    await handleSubmit(resource);
+                }
+            )}>
                 <TextInput
                     withAsterisk
                     label="Name"
