@@ -24,10 +24,9 @@ export default function ResourceDetailEdit() {
     );
 }
 
-// TODO: modify book to resource
 function ResourceEdit({id, name, amount}: Resource) {
     const navigate = useNavigate();
-    const [_updateBookResult, updateResource] = useUpdateResourceMutation();
+    const [_updateResourceResult, updateResource] = useUpdateResourceMutation();
 
     const form = useForm({
         initialValues: {
