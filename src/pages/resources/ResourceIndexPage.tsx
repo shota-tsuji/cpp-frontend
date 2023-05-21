@@ -1,10 +1,11 @@
 import React, {useMemo} from "react";
 import {Resource, useResourcesQuery} from "../../generated/graphql";
 import {useDisclosure} from '@mantine/hooks';
-import {Button, Box, Group, NumberInput, Paper, TextInput, Title} from "@mantine/core";
+import {Box, Button, Group, Menu, NumberInput, Paper, TextInput, Title} from "@mantine/core";
 import type {MRT_ColumnDef} from 'mantine-react-table';
 import {MantineReactTable} from 'mantine-react-table';
 import {useForm} from "@mantine/form";
+import {IconEdit} from '@tabler/icons-react';
 
 export default function ResourceIndexPage() {
     const [opened, {open, close}] = useDisclosure(false);
@@ -55,12 +56,16 @@ export default function ResourceIndexPage() {
                 <MantineReactTable
                     columns={columns}
                     data={resources}
+                    enableRowActions
                     enableRowSelection //enable some features
                     enableColumnOrdering
                     enableGlobalFilter={false} //turn off a feature
+                    renderRowActionMenuItems={({row}) => [<Menu.Item icon={<IconEdit/>} key={1} onClick={() => {
+                        console.info('View Profile', row);
+                    }}>Edit</Menu.Item>]}
                 />
             </Paper>
-            <ResourceEdit id={0} name="aaa" amount={10} />
+            <ResourceEdit id={0} name="aaa" amount={10}/>
         </React.Fragment>
     );
 }
@@ -89,6 +94,7 @@ function ResourceEdit({id, name, amount}: ResourceEditProps) {
                 />
 
                 <NumberInput
+                    withAsterisk
                     mt="md"
                     label="Amount"
                     {...form.getInputProps('amount')}
