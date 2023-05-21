@@ -12,8 +12,14 @@ input CreateStepInput {
 	duration: Int!
 }
 
+input CreateResourceInput {
+    name: String!
+    amount: Int!
+}
+
 type Mutation {
 	createRecipeDetail(recipeDetailData: CreateRecipeDetailInput!): RecipeDetail!
+	createResource(resourceData: CreateResourceInput!): Resource!
 }
 
 type Query {

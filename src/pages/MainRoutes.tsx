@@ -10,11 +10,13 @@ import ResourceRouter from "./resources/ResourceRoutes";
 // https://stackoverflow.com/questions/70815495/react-nested-routes-for-every-folder
 export default function MainRouter() {
     return (
-        <Routes>
-            <Route path="/recipes/*" element={<RecipeRouter/>}/>
-            <Route path="/resources/*" element={<ResourceRouter/>}/>
-            <Route path="/process/*" element={<ProcessGrid/>}/>
-        </Routes>
+        <React.Fragment>
+            <Routes>
+                <Route path="/recipes/*" element={<RecipeRouter/>}/>
+                <Route path="/resources/*" element={<ResourceRouter/>}/>
+                <Route path="/process/*" element={<ProcessGrid/>}/>
+            </Routes>
+        </React.Fragment>
     );
 }
 

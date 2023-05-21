@@ -5,11 +5,9 @@ import ResourceIndexPage from "./ResourceIndexPage";
 export default function ResourceRouter() {
     return (
         <React.Fragment>
-            <div>
-                <Routes>
-                    <Route index element={<ResourceIndexPage/>}/>
-                </Routes>
-            </div>
+            <Routes>
+                <Route index element={<ResourceIndexPage/>}/>
+            </Routes>
         </React.Fragment>
     );
 }
