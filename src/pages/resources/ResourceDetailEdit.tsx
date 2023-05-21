@@ -1,11 +1,11 @@
-import {Resource, useResourcesQuery} from "../../generated/graphql";
+import {Resource, useResourceQuery} from "../../generated/graphql";
 import {useParams} from "react-router-dom";
 import {Box, Button, Group, NumberInput, TextInput, Title} from "@mantine/core";
 import {useForm} from "@mantine/form";
 
 export default function ResourceDetailEdit() {
-    const params = useParams();
-    const [result, _reexecuteQuery] = useResourcesQuery();
+    const { resourceId } = useParams();
+    const [result, _reexecuteQuery] = useResourceQuery({ variables: { resourceId: resourceId! } });
     const {data, fetching, error} = result;
 
     if (error != null) {
@@ -15,10 +15,11 @@ export default function ResourceDetailEdit() {
     if (fetching || data == null) {
         return <p>Loading...</p>;
     }
-    const resource = data.resources.filter(r => r === params.resourceId);
+
+    const {id, name, amount} = data!.resource;
 
     return (
-        <ResourceEdit amount={resource.amount} id={resource.id} name={resource.name}/>
+        <ResourceEdit amount={amount} id={id} name={name}/>
     );
 }
 

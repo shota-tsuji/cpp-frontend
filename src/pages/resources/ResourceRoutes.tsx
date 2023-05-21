@@ -9,7 +9,7 @@ export default function ResourceRouter() {
         <React.Fragment>
             <Routes>
                 <Route index element={<ResourceIndexPage/>}/>
-                <Route path=":resourceId/edit" element={<ResourceDetailEdit/>}/>
+                <Route path=":resourceId/*" element={<ResourceDetailPage/>}/>
             </Routes>
         </React.Fragment>
     );

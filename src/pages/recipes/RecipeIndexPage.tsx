@@ -1,6 +1,6 @@
 import React from "react";
 import {useRecipesQuery} from '../../generated/graphql';
-import {Table} from '@mantine/core';
+import {Paper, Table, Title} from '@mantine/core';
 import RecipeAddButton from "../../features/recipes/RecipeAddButton";
 import {Link} from "react-router-dom";
 
@@ -24,6 +24,9 @@ export default function RecipeIndexPage() {
 
     return (
         <React.Fragment>
+            <Title order={1} mt="auto">Resources</Title>
+            <Paper shadow="xs" mt="md" p="lg">
+
             <RecipeAddButton/>
             <Table>
                 <thead>
@@ -33,6 +36,7 @@ export default function RecipeIndexPage() {
                 </thead>
                 <tbody>{recipes}</tbody>
             </Table>
+            </Paper>
         </React.Fragment>
     );
 }
