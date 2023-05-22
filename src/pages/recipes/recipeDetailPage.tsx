@@ -1,5 +1,5 @@
 import React from "react";
-import {useRecipeDetailQuery} from "../../generated/graphql";
+import {Step, useRecipeDetailQuery} from "../../generated/graphql";
 import {useParams} from "react-router-dom";
 import {Center, Timeline, Title} from "@mantine/core";
 
@@ -23,11 +23,19 @@ export default function RecipeDetailPage() {
             <Title order={2}>{description}</Title>
             <Center>
                 <Timeline active={1} bulletSize={32} lineWidth={4}>
-                    {steps.map(step => (<Timeline.Item title={step.description} key={step.id}>
-                        {step.duration}min: resource:{step.resourceId}: {step.orderNumber}
+                    {steps.sort(compare).map(step => (<Timeline.Item title={`Step${step.orderNumber}: ${step.description}`} key={step.id}>
+                        {step.duration}min: resource:{step.resourceId}
                     </Timeline.Item>))}
                 </Timeline>
             </Center>
         </React.Fragment>
     );
+}
+
+// https://reacthustle.com/blog/typescript-sort-array-of-objects-by-property
+function compare(s0: Step, s1: Step) {
+    if (s0.orderNumber < s1.orderNumber) {
+        return -1
+    }
+    return 0
 }
