@@ -1,7 +1,7 @@
 import React from "react";
-import {Center, Text, useParams} from "react-router-dom";
+import {useParams} from "react-router-dom";
 import {useResourceQuery} from "../../generated/graphql";
-import {Title} from "@mantine/core";
+import {Center, Text, Title} from "@mantine/core";
 
 export default function ResourceDetailPage() {
     const params = useParams();

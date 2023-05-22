@@ -24,7 +24,7 @@ export default function RecipeIndexPage() {
 
     return (
         <React.Fragment>
-            <Title order={1} mt="auto">Resources</Title>
+            <Title order={1} mt="auto">Recipes</Title>
             <Paper shadow="xs" mt="md" p="lg">
 
             <RecipeAddButton/>

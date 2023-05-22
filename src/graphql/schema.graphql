@@ -23,9 +23,25 @@ input UpdateResourceInput {
 	amount: Int!
 }
 
+input StepInput {
+	id: String!
+	description: String!
+	resourceId: Int!
+	orderNumber: Int!
+	duration: Int!
+}
+
+input UpdateRecipeDetailInput {
+	id: String!
+	title: String!
+	description: String!
+	steps: [StepInput!]!
+}
+
 type Mutation {
 	createRecipeDetail(recipeDetailData: CreateRecipeDetailInput!): RecipeDetail!
 	createResource(resourceData: CreateResourceInput!): Resource!
+	updateRecipeDetail(recipeDetailData: UpdateRecipeDetailInput!): RecipeDetail!
 	updateResource(resourceData: UpdateResourceInput!): Resource!
 }
 
