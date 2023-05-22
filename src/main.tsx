@@ -10,9 +10,11 @@ const client = createClient({
 });
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
-  <React.StrictMode>
+    // comment out to test react-beautiful-dnd on development mode
+    // https://github.com/atlassian/react-beautiful-dnd/issues/2396
+  //<React.StrictMode>
     <Provider value={client}>
         <App />
     </Provider>
-  </React.StrictMode>,
+  //</React.StrictMode>,
 )
