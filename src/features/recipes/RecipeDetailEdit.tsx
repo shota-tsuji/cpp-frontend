@@ -59,11 +59,8 @@ function RecipeEdit({id, title, description, steps}: RecipeDetail) {
     const form = useForm({
         initialValues: {
             steps: [
-                { description: 'John Doe', orderNumber: 'john@mantine.dev' },
-                { description: 'Bill Love', orderNumber: 'bill@mantine.dev' },
-                { description: 'Nancy Eagle', orderNumber: 'nanacy@mantine.dev' },
-                { description: 'Lim Notch', orderNumber: 'lim@mantine.dev' },
-                { description: 'Susan Seven', orderNumber: 'susan@mantine.dev' },
+                { description: 'John Doe', duration: '5', resourceId: 1 },
+                { description: 'Bill Love', duration: '10', resourceId: 1 },
             ],
         },
     });
@@ -78,7 +75,11 @@ function RecipeEdit({id, title, description, steps}: RecipeDetail) {
                     <TextInput placeholder="John Doe" {...form.getInputProps(`steps.${index}.description`)} />
                     <TextInput
                         placeholder="example@mail.com"
-                        {...form.getInputProps(`steps.${index}.orderNumber`)}
+                        {...form.getInputProps(`steps.${index}.duration`)}
+                    />
+                    <TextInput
+                        placeholder="resource name"
+                        {...form.getInputProps(`steps.${index}.resourceId`)}
                     />
                 </Group>
             )}
@@ -86,7 +87,7 @@ function RecipeEdit({id, title, description, steps}: RecipeDetail) {
     ));
 
     return (
-        <Box maw={500} mx="auto">
+        <Box maw={800} mx="auto">
             <DragDropContext
                 onDragEnd={({ destination, source }) =>
                     form.reorderListItem('steps', { from: source.index, to: destination.index })
@@ -103,7 +104,7 @@ function RecipeEdit({id, title, description, steps}: RecipeDetail) {
             </DragDropContext>
 
             <Group position="center" mt="md">
-                <Button onClick={() => form.insertListItem('steps', { description: '', orderNumber: '' })}>
+                <Button onClick={() => form.insertListItem('steps', { description: '', duration: '' })}>
                     Add cooking step
                 </Button>
             </Group>
