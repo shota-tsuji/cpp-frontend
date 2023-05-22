@@ -24,7 +24,7 @@ export default function RecipeDetailPage() {
             <Center>
                 <Timeline active={1} bulletSize={32} lineWidth={4}>
                     {steps.map(step => (<Timeline.Item title={step.description} key={step.id}>
-                        {step.duration}min: resource:{step.resourceId}
+                        {step.duration}min: resource:{step.resourceId}: {step.orderNumber}
                     </Timeline.Item>))}
                 </Timeline>
             </Center>

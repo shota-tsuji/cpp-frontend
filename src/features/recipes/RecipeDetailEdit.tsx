@@ -1,7 +1,7 @@
 import {useNavigate, useParams} from "react-router-dom";
-import {RecipeDetail, useRecipeDetailQuery, useUpdateRecipeDetailMutation} from "../../generated/graphql";
+import {RecipeDetail, StepInput, useRecipeDetailQuery, useUpdateRecipeDetailMutation} from "../../generated/graphql";
 import {useForm} from "@mantine/form";
-import {Box, Button, Center, Code, Group, Text, TextInput, Title} from "@mantine/core";
+import {Box, Button, Center, Code, Group, NumberInput, Text, TextInput, Title} from "@mantine/core";
 import {DragDropContext, Draggable, Droppable} from 'react-beautiful-dnd';
 import {IconGripVertical} from '@tabler/icons-react';
 import * as _ from 'lodash';
@@ -35,14 +35,6 @@ function RecipeEdit({id, title, description, steps}: RecipeDetail) {
     // To compare modified steps, keep original recipe detail
     const originalSteps = _.cloneDeep(steps);
 
-    // TODO: Filtering with respect to step ids
-    const handleSubmit = async (values: RecipeDetail) => {
-        console.info(originalSteps);
-        console.info(values);
-        //await updateRecipeDetail({recipeDetailData: {id: values.id, title: values.title, description: values.description, steps: values.steps}});
-        //navigate(`/recipes/${id}`);
-    };
-
     const form = useForm({
         initialValues: {
             title: title,
@@ -58,13 +50,23 @@ function RecipeEdit({id, title, description, steps}: RecipeDetail) {
                     <Center {...provided.dragHandleProps}>
                         <IconGripVertical size="1.2rem"/>
                     </Center>
-                    <TextInput placeholder="John Doe" {...form.getInputProps(`steps.${index}.description`)} />
                     <TextInput
-                        placeholder="example@mail.com"
+                        withAsterisk
+                        mt="md"
+                        label="Title"
+                        placeholder="John Doe"
+                        {...form.getInputProps(`steps.${index}.description`)}
+                    />
+                    <NumberInput
+                        withAsterisk
+                        mt="md"
+                        label="Duration"
                         {...form.getInputProps(`steps.${index}.duration`)}
                     />
-                    <TextInput
-                        placeholder="resource name"
+                    <NumberInput
+                        withAsterisk
+                        mt="md"
+                        label="Amount"
                         {...form.getInputProps(`steps.${index}.resourceId`)}
                     />
                 </Group>
@@ -72,6 +74,27 @@ function RecipeEdit({id, title, description, steps}: RecipeDetail) {
         </Draggable>
     ));
 
+    // TODO: Filtering with respect to step ids
+    const handleSubmit = async (values: RecipeDetail) => {
+        console.info(originalSteps);
+        console.info(values);
+        // Filtering
+        // Loop for values and check each step_id and update (set) orderNumber
+        const updatedSteps = values.steps.map((s, index) => {
+            // update order number as permuted order in the form
+            s.orderNumber = index;
+            console.info(s, index);
+            const stepInput: StepInput = {id: s.id, description: s.description, duration: s.duration, orderNumber: index, resourceId: s.resourceId};
+            return stepInput;
+        }).filter(step => step.id != '');
+        console.info(updatedSteps);
+        await updateRecipeDetail({recipeDetailData: {id: id, title: values.title, description: values.description, steps: updatedSteps}});
+
+        // If id is empty, its step is treated as creation
+        navigate(`/recipes/${id}`);
+    };
+
+    // TODO: validate description, resourceId, duration
     return (
         <Box maw={800} mx="auto">
             <Title order={1} mt="auto">Edit Recipe</Title>
@@ -91,8 +114,8 @@ function RecipeEdit({id, title, description, steps}: RecipeDetail) {
 
                     <DragDropContext
                         onDragEnd={({destination, source}) => {
-                            form.reorderListItem('steps', {from: source.index, to: destination.index});
-                            console.info(form.values.steps);
+                            form.reorderListItem('steps', {from: source.index, to: destination!.index});
+                            //console.info(form.values.steps);
                         }
                         }
                     >
@@ -112,7 +135,7 @@ function RecipeEdit({id, title, description, steps}: RecipeDetail) {
             </form>
 
             <Group position="center" mt="md">
-                <Button onClick={() => form.insertListItem('steps', {description: '', duration: '', resourceId: ''})}>
+                <Button onClick={() => form.insertListItem('steps', {id: '', description: '', resourceId: '', orderNumber: '', duration: '', })}>
                     Add cooking step
                 </Button>
             </Group>
