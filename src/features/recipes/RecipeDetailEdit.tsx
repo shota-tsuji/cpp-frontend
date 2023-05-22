@@ -58,27 +58,27 @@ function RecipeEdit({id, title, description, steps}: RecipeDetail) {
 
     const form = useForm({
         initialValues: {
-            employees: [
-                { name: 'John Doe', email: 'john@mantine.dev' },
-                { name: 'Bill Love', email: 'bill@mantine.dev' },
-                { name: 'Nancy Eagle', email: 'nanacy@mantine.dev' },
-                { name: 'Lim Notch', email: 'lim@mantine.dev' },
-                { name: 'Susan Seven', email: 'susan@mantine.dev' },
+            steps: [
+                { description: 'John Doe', orderNumber: 'john@mantine.dev' },
+                { description: 'Bill Love', orderNumber: 'bill@mantine.dev' },
+                { description: 'Nancy Eagle', orderNumber: 'nanacy@mantine.dev' },
+                { description: 'Lim Notch', orderNumber: 'lim@mantine.dev' },
+                { description: 'Susan Seven', orderNumber: 'susan@mantine.dev' },
             ],
         },
     });
 
-    const fields = form.values.employees.map((_, index) => (
+    const fields = form.values.steps.map((_, index) => (
         <Draggable key={index} index={index} draggableId={index.toString()}>
             {(provided) => (
                 <Group ref={provided.innerRef} mt="xs" {...provided.draggableProps}>
                     <Center {...provided.dragHandleProps}>
                         <IconGripVertical size="1.2rem" />
                     </Center>
-                    <TextInput placeholder="John Doe" {...form.getInputProps(`employees.${index}.name`)} />
+                    <TextInput placeholder="John Doe" {...form.getInputProps(`steps.${index}.description`)} />
                     <TextInput
                         placeholder="example@mail.com"
-                        {...form.getInputProps(`employees.${index}.email`)}
+                        {...form.getInputProps(`steps.${index}.orderNumber`)}
                     />
                 </Group>
             )}
@@ -89,7 +89,7 @@ function RecipeEdit({id, title, description, steps}: RecipeDetail) {
         <Box maw={500} mx="auto">
             <DragDropContext
                 onDragEnd={({ destination, source }) =>
-                    form.reorderListItem('employees', { from: source.index, to: destination.index })
+                    form.reorderListItem('steps', { from: source.index, to: destination.index })
                 }
             >
                 <Droppable droppableId="dnd-list" direction="vertical">
@@ -103,8 +103,8 @@ function RecipeEdit({id, title, description, steps}: RecipeDetail) {
             </DragDropContext>
 
             <Group position="center" mt="md">
-                <Button onClick={() => form.insertListItem('employees', { name: '', email: '' })}>
-                    Add employee
+                <Button onClick={() => form.insertListItem('steps', { description: '', orderNumber: '' })}>
+                    Add cooking step
                 </Button>
             </Group>
 
