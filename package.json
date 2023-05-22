@@ -17,6 +17,7 @@
     "@mantine/form": "^6.0.11",
     "@mantine/hooks": "^6.0.11",
     "@tabler/icons-react": "^2.20.0",
+    "@types/react-beautiful-dnd": "^13.1.4",
     "dayjs": "^1.11.7",
     "graphql": "^16.6.0",
     "mantine-react-table": "^1.0.0-beta.8",
