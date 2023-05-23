@@ -1,12 +1,14 @@
 import React, {useMemo, useRef} from "react";
 import {Recipe, useRecipesQuery} from '../../generated/graphql';
-import {Button, Paper, Title} from '@mantine/core';
+import {ActionIcon, Box, Button, Paper, Title, Tooltip} from '@mantine/core';
 import RecipeAddButton from "../../features/recipes/RecipeAddButton";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import type {MRT_ColumnDef} from 'mantine-react-table';
 import {MantineReactTable, MRT_TableInstance} from 'mantine-react-table';
+import {IconEdit} from '@tabler/icons-react';
 
 export default function RecipeIndexPage() {
+    const navigate = useNavigate();
     const [result, _reexecuteQuery] = useRecipesQuery();
     const {data, fetching, error} = result;
     console.log(JSON.stringify({fetching, data, error}, null, 2));
@@ -41,17 +43,6 @@ export default function RecipeIndexPage() {
         </tr>
     ));
 
-    /*
-            <Table>
-                <thead>
-                <tr>
-                    <th>Recipe name</th>
-                </tr>
-                </thead>
-                <tbody>{recipes}</tbody>
-            </Table>
-     */
-
     const someEventHandler = () => {
         const rowSelection = tableInstanceRef.current.getState().rowSelection;
         console.info(rowSelection);
@@ -66,20 +57,42 @@ export default function RecipeIndexPage() {
                 <MantineReactTable
                     columns={columns}
                     data={data!.recipes}
+                    enableRowActions
                     enableRowSelection //enable some features
                     enableColumnOrdering
                     enableGlobalFilter={false} //turn off a feature
+                    getRowId={(originalRow) => originalRow.id}
                     renderTopToolbarCustomActions={({table}) => {
                         const handle = () => {
                             console.info(table.getSelectedRowModel().flatRows);
                         };
 
                         return (
-                            <Button onClick={handle}>
-                                {'Do Something with Selected Rows'}
-                            </Button>
+                            <div>
+                                <Button onClick={handle}>
+                                    {'Do Something with Selected Rows'}
+                                </Button>
+                            </div>
                         );
                     }}
+                    renderRowActions={({row, table}) => (
+                        <Box sx={{display: 'flex', gap: '16px'}}>
+                            <Tooltip withArrow position="left" label="Edit">
+                                <ActionIcon onClick={() => {
+                                    console.info(row);
+                                    navigate(`/recipes/${row.id}`)
+                                    {/*
+                                    navigate("/recipes/");
+                                    open();
+                                    setFormValue({id: row.id, name: row.name, amount: row.amount});
+                                    */
+                                    }
+                                }}>
+                                    <IconEdit/>
+                                </ActionIcon>
+                            </Tooltip>
+                        </Box>
+                    )}
                 />
             </Paper>
         </React.Fragment>
