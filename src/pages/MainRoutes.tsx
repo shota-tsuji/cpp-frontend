@@ -5,7 +5,7 @@ import RecipeRouter from "./recipes/RecipeRoutes";
 import StepButton, {STEP_BUTTON_UNIT, StepButtonProps} from "../features/process/StepButton";
 import ResourceRouter from "./resources/ResourceRoutes";
 import {useNavigate, useParams} from "react-router-dom";
-import {useProcessQuery} from "../generated/graphql";
+import {useProcessQuery, useResourcesQuery} from "../generated/graphql";
 
 // use wildcard pattern to segregate and match to multiple nested routes.
 // https://reactrouter.com/en/main/route/route#splats
@@ -81,19 +81,27 @@ function ProcessGrid() {
     const unit_of_time = 5;
 
     const {processId} = useParams();
-    const [result, _reexecuteQuery] = useProcessQuery({variables: {processId: processId!}});
-    const {data, fetching, error} = result;
+    const [recipeResult, _recipeReexecuteQuery] = useProcessQuery({variables: {processId: processId!}});
+    const [resourceResult, _reexecuteQuery] = useResourcesQuery();
 
-    if (error != null) {
-        return <>{JSON.stringify(error)}</>;
+    if (recipeResult.error != null || resourceResult.error != null) {
+        return <>{JSON.stringify(recipeResult.error)}</>;
     }
 
-    if (fetching || data == null) {
-        return <p>Loading...</p>;
+    if (recipeResult.fetching || recipeResult.data == null) {
+        return <p>recipe Loading...</p>;
     }
 
-    data!.process.map((recipeDetail) =>
+    recipeResult.data!.process.map((recipeDetail) =>
         console.info(recipeDetail)
+    )
+
+    if (resourceResult.fetching || resourceResult.data == null) {
+        return <p>resource Loading...</p>;
+    }
+
+    resourceResult.data!.resources.map((r) =>
+        console.info(r)
     )
 
     const resource_steps = [
