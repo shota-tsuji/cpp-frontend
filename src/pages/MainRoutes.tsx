@@ -4,6 +4,8 @@ import {Route, Routes} from "react-router-dom";
 import RecipeRouter from "./recipes/RecipeRoutes";
 import StepButton, {STEP_BUTTON_UNIT, StepButtonProps} from "../features/process/StepButton";
 import ResourceRouter from "./resources/ResourceRoutes";
+import {useNavigate, useParams} from "react-router-dom";
+import {useProcessQuery} from "../generated/graphql";
 
 // use wildcard pattern to segregate and match to multiple nested routes.
 // https://reactrouter.com/en/main/route/route#splats
@@ -14,7 +16,7 @@ export default function MainRouter() {
             <Routes>
                 <Route path="/recipes/*" element={<RecipeRouter/>}/>
                 <Route path="/resources/*" element={<ResourceRouter/>}/>
-                <Route path="/process/*" element={<ProcessGrid/>}/>
+                <Route path="/process/:processId" element={<ProcessGrid/>}/>
             </Routes>
         </React.Fragment>
     );
@@ -77,6 +79,22 @@ function ProcessGrid() {
     const width = 260;
     const left_pad = 30;
     const unit_of_time = 5;
+
+    const {processId} = useParams();
+    const [result, _reexecuteQuery] = useProcessQuery({variables: {processId: processId!}});
+    const {data, fetching, error} = result;
+
+    if (error != null) {
+        return <>{JSON.stringify(error)}</>;
+    }
+
+    if (fetching || data == null) {
+        return <p>Loading...</p>;
+    }
+
+    data!.process.map((recipeDetail) =>
+        console.info(recipeDetail)
+    )
 
     const resource_steps = [
         [
