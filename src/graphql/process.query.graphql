@@ -1,0 +1,14 @@
+query process($processId: ID!){
+    process(id: $processId) {
+        id,
+        title,
+        description,
+        steps {
+            id,
+            description,
+            resourceId,
+            orderNumber,
+            duration
+        }
+    }
+}

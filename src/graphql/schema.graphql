@@ -50,6 +50,7 @@ type Query {
         recipes: [Recipe!]!
         resource(id: ID!): Resource!
         resources: [Resource!]!
+		process(id: ID!): [RecipeDetail!]!
 }
 
 type Recipe {
