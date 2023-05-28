@@ -112,11 +112,11 @@ function ProcessGrid() {
         return <p>resource Loading...</p>;
     }
 
-    const step_lists: TimelineStep[][] = [];
+    const step_lists: StepButtonProps[][] = [];
     resourceInfos.forEach(resourceInfo => {
-        const steps: TimelineStep[] = [];
+        const steps: StepButtonProps[] = [];
         resourceInfo.steps.forEach(step => {
-            const s: TimelineStep = {
+            const s: StepButtonProps = {
                 id: step.id,
                 recipe_name: step.recipeId,
                 description: step.description,
@@ -130,7 +130,7 @@ function ProcessGrid() {
     console.info("step_lists");
     console.info(step_lists);
 
-
+    /*
     const resource_steps = [
         [
             {
@@ -179,11 +179,12 @@ function ProcessGrid() {
             }
         ]
     ];
+     */
 
     console.info("resource_steps");
-    console.info(resource_steps);
+    //console.info(resource_steps);
 
-    const resource_kind = resource_steps.length;
+    const resource_kind = step_lists.length;
 
     const time_label_count = 12;
     const time_label_values = Array.from(Array(time_label_count).keys()).map(x => x * unit_of_time);
@@ -200,7 +201,7 @@ function ProcessGrid() {
         .map(i => <ResourceColumn top={0}
                                   left={i * width + left_pad}
                                   height={bar_height}
-                                  steps={resource_steps[i]}/>);
+                                  steps={step_lists[i]}/>);
 
     return (
         <div>
