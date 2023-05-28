@@ -1,5 +1,4 @@
 import React from "react";
-import '../App.css';
 import {Route, Routes, useParams} from "react-router-dom";
 import RecipeRouter from "./recipes/RecipeRoutes";
 import StepButton, {STEP_BUTTON_UNIT, StepButtonProps} from "../features/process/StepButton";
@@ -105,10 +104,8 @@ function ProcessGrid() {
         return <p>recipe Loading...</p>;
     }
 
-    const stepResults = processResult.data!.process.stepResults;
     const resourceInfos = processResult.data!.process.resourceInfos
     console.info(processResult.data!.process.resourceInfos);
-    console.info(stepResults);
 
     if (resourceResult.fetching || resourceResult.data == null) {
         return <p>resource Loading...</p>;
@@ -120,23 +117,6 @@ function ProcessGrid() {
 
     let steps: Array<StepResult> = [];
     let k: keyof StepResult;
-    for (k in stepResults) {
-        steps.push(stepResults[k]);
-        const step = stepResults[k];
-        //console.info(step.duration)
-        //console.info(step.duration! - 1)
-        const timelineStep: TimelineStep = {
-            id: step.id,
-            recipe_name: "",
-            description: "",
-            top: step.startTime * height,
-            height: (step.duration - 1) * height + STEP_BUTTON_UNIT.height,
-        }
-        //console.info(timelineStep)
-        // set each timeline if multiple resources are used for each resource
-        //if ()
-
-    }
 
     console.info("steps")
     console.info(steps)
@@ -145,19 +125,6 @@ function ProcessGrid() {
     for (rk in resourceInfos) {
         const resourceInfo = resourceInfos[rk];
         const selected_steps: StepResult[] = [];
-        stepResults.forEach((step) => {
-            if (step.resourceId === resourceInfo.id) {
-                selected_steps.push(step);
-            }
-        });
-
-        for (let i = 0; i < resourceInfo.usedResourcesCount; i++) {
-            const timeline: ResourceTimeline = {
-                id: resourceInfo.id, name: "", steps: []
-            }
-            resource_use.push(timeline)
-        }
-        console.info(selected_steps);
     }
 
     const resource_steps0 = steps.map(step => {
