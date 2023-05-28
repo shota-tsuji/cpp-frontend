@@ -24,7 +24,7 @@ type ResourceColumnProps = {
     top: number;
     left: number;
     height: number;
-    steps: [StepButtonProps];
+    steps: StepButtonProps[];
 }
 
 function ResourceColumn(props: ResourceColumnProps) {
