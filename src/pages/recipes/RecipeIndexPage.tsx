@@ -1,14 +1,21 @@
 import React, {useMemo, useRef} from "react";
-import {Recipe, useRecipesQuery} from '../../generated/graphql';
+import {
+    Recipe,
+    useCreateProcessMutation,
+    useCreateRecipeDetailMutation,
+    useRecipesQuery
+} from '../../generated/graphql';
 import {ActionIcon, Box, Button, Paper, Title, Tooltip} from '@mantine/core';
 import RecipeAddButton from "../../features/recipes/RecipeAddButton";
 import {Link, useNavigate} from "react-router-dom";
 import type {MRT_ColumnDef} from 'mantine-react-table';
 import {MantineReactTable, MRT_TableInstance} from 'mantine-react-table';
 import {IconEdit} from '@tabler/icons-react';
+import {create} from "lodash";
 
 export default function RecipeIndexPage() {
     const navigate = useNavigate();
+    const [_createProcessResult, createProcess] = useCreateProcessMutation();
     const [result, _reexecuteQuery] = useRecipesQuery();
     const {data, fetching, error} = result;
     console.log(JSON.stringify({fetching, data, error}, null, 2));
@@ -63,14 +70,25 @@ export default function RecipeIndexPage() {
                     enableGlobalFilter={false} //turn off a feature
                     getRowId={(originalRow) => originalRow.id}
                     renderTopToolbarCustomActions={({table}) => {
-                        const handle = () => {
+                        const handle = async () => {
+                            const processInput: string[] = [];
                             console.info(table.getSelectedRowModel().flatRows);
+                            table.getSelectedRowModel().flatRows.forEach(row => {
+                                processInput.push(row.id);
+                            })
+                            console.info(processInput);
+
+                            const result = await createProcess({ recipeIdList: {
+                                recipeIdList : processInput
+                                } });
+                            const processId = result.data!.createProcess.id;
+                            navigate(`/process/${processId}`);
                         };
 
                         return (
                             <div>
                                 <Button onClick={handle}>
-                                    {'Do Something with Selected Rows'}
+                                    {'Check process'}
                                 </Button>
                             </div>
                         );
