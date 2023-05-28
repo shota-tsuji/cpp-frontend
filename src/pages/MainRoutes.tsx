@@ -112,7 +112,24 @@ function ProcessGrid() {
         return <p>resource Loading...</p>;
     }
 
-    
+    const step_lists: TimelineStep[][] = [];
+    resourceInfos.forEach(resourceInfo => {
+        const steps: TimelineStep[] = [];
+        resourceInfo.steps.forEach(step => {
+            const s: TimelineStep = {
+                id: step.id,
+                recipe_name: step.recipeId,
+                description: step.description,
+                top: (step.startTime / PROCESS_GRID_UNIT.unit_of_time) * PROCESS_GRID_UNIT.height,
+                height: (step.duration / PROCESS_GRID_UNIT.unit_of_time -1)  * PROCESS_GRID_UNIT.height + STEP_BUTTON_UNIT.height,
+            }
+            steps.push(s)
+        });
+        step_lists.push(steps);
+    });
+    console.info("step_lists");
+    console.info(step_lists);
+
 
     const resource_steps = [
         [
@@ -163,6 +180,7 @@ function ProcessGrid() {
         ]
     ];
 
+    console.info("resource_steps");
     console.info(resource_steps);
 
     const resource_kind = resource_steps.length;
