@@ -110,7 +110,7 @@ function ProcessGrid() {
         resourceInfo.steps.forEach(step => {
             const s: StepButtonProps = {
                 id: step.id,
-                recipe_name: step.recipeId,
+                recipe_name: step.recipeName,
                 description: step.description,
                 top: (step.startTime / PROCESS_GRID_UNIT.unit_of_time) * PROCESS_GRID_UNIT.height,
                 height: (step.duration / PROCESS_GRID_UNIT.unit_of_time -1)  * PROCESS_GRID_UNIT.height + STEP_BUTTON_UNIT.height,
