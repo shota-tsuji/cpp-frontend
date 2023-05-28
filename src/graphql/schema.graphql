@@ -102,6 +102,8 @@ type StepResult {
 	duration: Int!
 	orderNumber: Int!
 	timelineIndex: Int!
+	description: String!
+	recipeName: String!
 }
 
 schema {

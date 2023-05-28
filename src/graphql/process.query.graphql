@@ -10,6 +10,8 @@ query process($processId: ID!){
                 startTime,
                 duration,
                 timelineIndex
+                description,
+                recipeName,
             }
         }
     }
