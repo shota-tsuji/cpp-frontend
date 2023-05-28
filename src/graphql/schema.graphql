@@ -21,6 +21,11 @@ input CreateProcessInput {
 	recipeIdList: [String!]!
 }
 
+input CreateRecipeStepInput {
+	id: String!
+	steps: [CreateStepInput!]!
+}
+
 input UpdateResourceInput {
 	id: Int!
 	name: String!
@@ -46,12 +51,17 @@ type ProcessId {
 	id: Int!
 }
 
+type RecipeId {
+	id: String!
+}
+
 type Mutation {
 	createRecipeDetail(recipeDetailData: CreateRecipeDetailInput!): RecipeDetail!
 	createResource(resourceData: CreateResourceInput!): Resource!
 	updateRecipeDetail(recipeDetailData: UpdateRecipeDetailInput!): RecipeDetail!
 	updateResource(resourceData: UpdateResourceInput!): Resource!
 	createProcess(recipeIdList: CreateProcessInput!): ProcessId!
+	createStep(recipeDetailData: CreateRecipeStepInput!): RecipeId!
 }
 
 type Query {
