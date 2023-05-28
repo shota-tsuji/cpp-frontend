@@ -3,7 +3,7 @@ import {Route, Routes, useParams} from "react-router-dom";
 import RecipeRouter from "./recipes/RecipeRoutes";
 import StepButton, {STEP_BUTTON_UNIT, StepButtonProps} from "../features/process/StepButton";
 import ResourceRouter from "./resources/ResourceRoutes";
-import {ResourceInfo, StepResult, useProcessQuery, useResourcesQuery} from "../generated/graphql";
+import {useProcessQuery, useResourcesQuery} from "../generated/graphql";
 
 // use wildcard pattern to segregate and match to multiple nested routes.
 // https://reactrouter.com/en/main/route/route#splats
@@ -30,7 +30,8 @@ type ResourceColumnProps = {
 function ResourceColumn(props: ResourceColumnProps) {
     const step_buttons = props.steps.map((step) => <StepButton id={step.id} recipe_name={step.recipe_name}
                                                                top={step.top} height={step.height}
-                                                               description={step.description}/>);
+                                                               description={step.description}
+                                                               key={step.id}/>);
     return (
         <div className="process-step" style={{top: props.top, left: props.left, height: props.height, width: 260}}>
             {step_buttons}
@@ -113,7 +114,7 @@ function ProcessGrid() {
                 recipe_name: step.recipeName,
                 description: step.description,
                 top: (step.startTime / PROCESS_GRID_UNIT.unit_of_time) * PROCESS_GRID_UNIT.height,
-                height: (step.duration / PROCESS_GRID_UNIT.unit_of_time -1)  * PROCESS_GRID_UNIT.height + STEP_BUTTON_UNIT.height,
+                height: (step.duration / PROCESS_GRID_UNIT.unit_of_time - 1) * PROCESS_GRID_UNIT.height + STEP_BUTTON_UNIT.height,
             }
             steps.push(s)
         });
