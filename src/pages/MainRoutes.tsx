@@ -92,9 +92,12 @@ function ProcessGrid() {
         return <p>recipe Loading...</p>;
     }
 
+    console.info(recipeResult.data!.process.message);
+    /*
     recipeResult.data!.process.map((recipeDetail) =>
         console.info(recipeDetail)
     )
+     */
 
     if (resourceResult.fetching || resourceResult.data == null) {
         return <p>resource Loading...</p>;
