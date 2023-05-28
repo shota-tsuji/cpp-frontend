@@ -55,7 +55,6 @@ type Query {
 
 type Process {
 	resourceInfos: [ResourceInfo!]!
-	stepResults: [StepResult!]!
 }
 
 type HelloResponse {
