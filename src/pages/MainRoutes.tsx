@@ -80,11 +80,12 @@ type TimelineStep = {
     height: number;
 }
 
-type ResourceTimeline = {
-    id: number;
-    name: string;
-    steps: TimelineStep[];
-}
+export const PROCESS_GRID_UNIT = {
+    'height': 60,
+    'width': 260,
+    'left_pad': 30,
+    'unit_of_time': 5,
+};
 
 function ProcessGrid() {
     const height = 60;
@@ -111,31 +112,7 @@ function ProcessGrid() {
         return <p>resource Loading...</p>;
     }
 
-    resourceResult.data!.resources.map((r) =>
-        console.info(r)
-    )
-
-    let steps: Array<StepResult> = [];
-    let k: keyof StepResult;
-
-    console.info("steps")
-    console.info(steps)
-    const resource_use: ResourceTimeline[] = [];
-    let rk: keyof ResourceInfo;
-    for (rk in resourceInfos) {
-        const resourceInfo = resourceInfos[rk];
-        const selected_steps: StepResult[] = [];
-    }
-
-    const resource_steps0 = steps.map(step => {
-        return {
-            id: step.id,
-            recipe_name: "01",
-            description: "野菜を切る",
-            top: step.startTime * height,
-            height: step.duration * height + STEP_BUTTON_UNIT.height,
-        }
-    });
+    
 
     const resource_steps = [
         [
@@ -185,6 +162,8 @@ function ProcessGrid() {
             }
         ]
     ];
+
+    console.info(resource_steps);
 
     const resource_kind = resource_steps.length;
 
