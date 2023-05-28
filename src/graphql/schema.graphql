@@ -83,8 +83,8 @@ type Resource {
 
 type ResourceInfo {
 	id: Int!
-	isUsedMultipleResources: Boolean!
-	usedResourcesCount: Int!
+	name: String!
+	steps: [StepResult!]!
 }
 
 type Step {

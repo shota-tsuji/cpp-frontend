@@ -11,8 +11,15 @@ query process($processId: ID!){
         }
         resourceInfos {
             id,
-            isUsedMultipleResources,
-            usedResourcesCount
+            name,
+            steps {
+                id,
+                recipeId,
+                resourceId,
+                startTime,
+                duration,
+                timelineIndex
+            }
         }
     }
 }

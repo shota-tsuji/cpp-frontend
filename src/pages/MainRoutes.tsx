@@ -1,11 +1,10 @@
 import React from "react";
 import '../App.css';
-import {Route, Routes} from "react-router-dom";
+import {Route, Routes, useParams} from "react-router-dom";
 import RecipeRouter from "./recipes/RecipeRoutes";
 import StepButton, {STEP_BUTTON_UNIT, StepButtonProps} from "../features/process/StepButton";
 import ResourceRouter from "./resources/ResourceRoutes";
-import {useNavigate, useParams} from "react-router-dom";
-import {useProcessQuery, useResourcesQuery} from "../generated/graphql";
+import {ResourceInfo, StepResult, useProcessQuery, useResourcesQuery} from "../generated/graphql";
 
 // use wildcard pattern to segregate and match to multiple nested routes.
 // https://reactrouter.com/en/main/route/route#splats
@@ -74,6 +73,20 @@ function TimeHorizontalBar(props: TimeHorizontalBarProps) {
     );
 }
 
+type TimelineStep = {
+    id: string;
+    recipe_name: string;
+    description: string;
+    top: number;
+    height: number;
+}
+
+type ResourceTimeline = {
+    id: number;
+    name: string;
+    steps: TimelineStep[];
+}
+
 function ProcessGrid() {
     const height = 60;
     const width = 260;
@@ -81,23 +94,21 @@ function ProcessGrid() {
     const unit_of_time = 5;
 
     const {processId} = useParams();
-    const [recipeResult, _recipeReexecuteQuery] = useProcessQuery({variables: {processId: processId!}});
+    const [processResult, _recipeReexecuteQuery] = useProcessQuery({variables: {processId: processId!}});
     const [resourceResult, _reexecuteQuery] = useResourcesQuery();
 
-    if (recipeResult.error != null || resourceResult.error != null) {
-        return <>{JSON.stringify(recipeResult.error)}</>;
+    if (processResult.error != null || resourceResult.error != null) {
+        return <>{JSON.stringify(processResult.error)}</>;
     }
 
-    if (recipeResult.fetching || recipeResult.data == null) {
+    if (processResult.fetching || processResult.data == null) {
         return <p>recipe Loading...</p>;
     }
 
-    console.info(recipeResult.data!.process.message);
-    /*
-    recipeResult.data!.process.map((recipeDetail) =>
-        console.info(recipeDetail)
-    )
-     */
+    const stepResults = processResult.data!.process.stepResults;
+    const resourceInfos = processResult.data!.process.resourceInfos
+    console.info(processResult.data!.process.resourceInfos);
+    console.info(stepResults);
 
     if (resourceResult.fetching || resourceResult.data == null) {
         return <p>resource Loading...</p>;
@@ -106,6 +117,58 @@ function ProcessGrid() {
     resourceResult.data!.resources.map((r) =>
         console.info(r)
     )
+
+    let steps: Array<StepResult> = [];
+    let k: keyof StepResult;
+    for (k in stepResults) {
+        steps.push(stepResults[k]);
+        const step = stepResults[k];
+        //console.info(step.duration)
+        //console.info(step.duration! - 1)
+        const timelineStep: TimelineStep = {
+            id: step.id,
+            recipe_name: "",
+            description: "",
+            top: step.startTime * height,
+            height: (step.duration - 1) * height + STEP_BUTTON_UNIT.height,
+        }
+        //console.info(timelineStep)
+        // set each timeline if multiple resources are used for each resource
+        //if ()
+
+    }
+
+    console.info("steps")
+    console.info(steps)
+    const resource_use: ResourceTimeline[] = [];
+    let rk: keyof ResourceInfo;
+    for (rk in resourceInfos) {
+        const resourceInfo = resourceInfos[rk];
+        const selected_steps: StepResult[] = [];
+        stepResults.forEach((step) => {
+            if (step.resourceId === resourceInfo.id) {
+                selected_steps.push(step);
+            }
+        });
+
+        for (let i = 0; i < resourceInfo.usedResourcesCount; i++) {
+            const timeline: ResourceTimeline = {
+                id: resourceInfo.id, name: "", steps: []
+            }
+            resource_use.push(timeline)
+        }
+        console.info(selected_steps);
+    }
+
+    const resource_steps0 = steps.map(step => {
+        return {
+            id: step.id,
+            recipe_name: "01",
+            description: "野菜を切る",
+            top: step.startTime * height,
+            height: step.duration * height + STEP_BUTTON_UNIT.height,
+        }
+    });
 
     const resource_steps = [
         [
