@@ -66,7 +66,7 @@ function RecipeEdit({id, title, description, steps}: RecipeDetail) {
                     <NumberInput
                         withAsterisk
                         mt="md"
-                        label="Amount"
+                        label="Resource"
                         {...form.getInputProps(`steps.${index}.resourceId`)}
                     />
                 </Group>
@@ -76,22 +76,29 @@ function RecipeEdit({id, title, description, steps}: RecipeDetail) {
 
     // TODO: Filtering with respect to step ids
     const handleSubmit = async (values: RecipeDetail) => {
-        console.info(originalSteps);
-        console.info(values);
+        //console.info(originalSteps);
+        //console.info(values);
+
         // Filtering
         // Loop for values and check each step_id and update (set) orderNumber
         const updatedSteps = values.steps.map((s, index) => {
             // update order number as permuted order in the form
             s.orderNumber = index;
-            console.info(s, index);
+            //console.info(s, index);
             const stepInput: StepInput = {id: s.id, description: s.description, duration: s.duration, orderNumber: index, resourceId: s.resourceId};
             return stepInput;
         }).filter(step => step.id != '');
-        console.info(updatedSteps);
+        const createdSteps = values.steps.map((s, index) => {
+            // update order number as permuted order in the form
+            s.orderNumber = index;
+            const stepInput: StepInput = {id: s.id, description: s.description, duration: s.duration, orderNumber: index, resourceId: s.resourceId};
+            return stepInput;
+        }).filter(step => step.id == '');
+        console.info(createdSteps);
         await updateRecipeDetail({recipeDetailData: {id: id, title: values.title, description: values.description, steps: updatedSteps}});
 
         // If id is empty, its step is treated as creation
-        navigate(`/recipes/${id}`);
+        //navigate(`/recipes/${id}`);
     };
 
     // TODO: validate description, resourceId, duration
