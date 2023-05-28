@@ -122,11 +122,8 @@ function ProcessGrid() {
     console.info("step_lists");
     console.info(step_lists);
 
-    console.info("resource_steps");
-    //console.info(resource_steps);
-
     const resource_kind = step_lists.length;
-
+    // TODO: set from max of end time
     const time_label_count = 12;
     const time_label_values = Array.from(Array(time_label_count).keys()).map(x => x * unit_of_time);
     const time_label_list = time_label_values.map((value) => <TimeLabel time={value}/>);
