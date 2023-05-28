@@ -72,14 +72,6 @@ function TimeHorizontalBar(props: TimeHorizontalBarProps) {
     );
 }
 
-type TimelineStep = {
-    id: string;
-    recipe_name: string;
-    description: string;
-    top: number;
-    height: number;
-}
-
 export const PROCESS_GRID_UNIT = {
     'height': 60,
     'width': 260,
@@ -129,57 +121,6 @@ function ProcessGrid() {
     });
     console.info("step_lists");
     console.info(step_lists);
-
-    /*
-    const resource_steps = [
-        [
-            {
-                id: 0,
-                recipe_name: "カレー",
-                description: "野菜を切る",
-                top: 0 * height,
-                height: 0 * height + STEP_BUTTON_UNIT.height,
-            },
-            {
-                id: 1,
-                recipe_name: "きんぴらごぼう",
-                description: "野菜を切る",
-                top: 1 * height,
-                height: 0 * height + STEP_BUTTON_UNIT.height,
-            }
-        ], [
-            {
-                id: 2,
-                recipe_name: "カレー",
-                description: "煮込む",
-                top: 1 * height,
-                height: 0 * height + STEP_BUTTON_UNIT.height,
-            },
-            {
-                id: 3,
-                recipe_name: "きんぴらごぼう",
-                description: "柔らかくなるまで煮る",
-                top: 2 * height,
-                height: 1 * height + STEP_BUTTON_UNIT.height,
-            }
-        ], [
-            {
-                id: 4,
-                recipe_name: "きんぴらごぼう",
-                description: "下ごしらえ",
-                top: 0 * height,
-                height: 0 * height + STEP_BUTTON_UNIT.height,
-            },
-            {
-                id: 1,
-                recipe_name: "ブロッコリー",
-                description: "電子レンジで温める",
-                top: 4 * height,
-                height: 0 * height + STEP_BUTTON_UNIT.height,
-            }
-        ]
-    ];
-     */
 
     console.info("resource_steps");
     //console.info(resource_steps);
