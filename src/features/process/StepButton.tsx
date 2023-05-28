@@ -5,7 +5,7 @@ export const STEP_BUTTON_UNIT = {
 };
 
 export type StepButtonProps = {
-    id: number;
+    id: string;
     recipe_name: string;
     description: string;
     top: number;

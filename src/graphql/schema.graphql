@@ -50,7 +50,15 @@ type Query {
         recipes: [Recipe!]!
         resource(id: ID!): Resource!
         resources: [Resource!]!
-		process(id: ID!): [RecipeDetail!]!
+		process(id: ID!): Process!
+}
+
+type Process {
+	resourceInfos: [ResourceInfo!]!
+}
+
+type HelloResponse {
+	message: String!
 }
 
 type Recipe {
@@ -72,12 +80,30 @@ type Resource {
         amount: Int!
 }
 
+type ResourceInfo {
+	id: Int!
+	name: String!
+	steps: [StepResult!]!
+}
+
 type Step {
 	id: String!
 	description: String!
 	resourceId: Int!
 	orderNumber: Int!
 	duration: Int!
+}
+
+type StepResult {
+	id: String!
+	recipeId: String!
+	resourceId: Int!
+	startTime: Int!
+	duration: Int!
+	orderNumber: Int!
+	timelineIndex: Int!
+	description: String!
+	recipeName: String!
 }
 
 schema {

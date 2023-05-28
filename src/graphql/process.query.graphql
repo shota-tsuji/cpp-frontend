@@ -1,14 +1,18 @@
 query process($processId: ID!){
     process(id: $processId) {
-        id,
-        title,
-        description,
-        steps {
+        resourceInfos {
             id,
-            description,
-            resourceId,
-            orderNumber,
-            duration
+            name,
+            steps {
+                id,
+                recipeId,
+                resourceId,
+                startTime,
+                duration,
+                timelineIndex
+                description,
+                recipeName,
+            }
         }
     }
 }

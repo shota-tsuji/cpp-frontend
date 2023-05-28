@@ -1,10 +1,8 @@
 import React from "react";
-import '../App.css';
-import {Route, Routes} from "react-router-dom";
+import {Route, Routes, useParams} from "react-router-dom";
 import RecipeRouter from "./recipes/RecipeRoutes";
 import StepButton, {STEP_BUTTON_UNIT, StepButtonProps} from "../features/process/StepButton";
 import ResourceRouter from "./resources/ResourceRoutes";
-import {useNavigate, useParams} from "react-router-dom";
 import {useProcessQuery, useResourcesQuery} from "../generated/graphql";
 
 // use wildcard pattern to segregate and match to multiple nested routes.
@@ -26,13 +24,14 @@ type ResourceColumnProps = {
     top: number;
     left: number;
     height: number;
-    steps: [StepButtonProps];
+    steps: StepButtonProps[];
 }
 
 function ResourceColumn(props: ResourceColumnProps) {
     const step_buttons = props.steps.map((step) => <StepButton id={step.id} recipe_name={step.recipe_name}
                                                                top={step.top} height={step.height}
-                                                               description={step.description}/>);
+                                                               description={step.description}
+                                                               key={step.id}/>);
     return (
         <div className="process-step" style={{top: props.top, left: props.left, height: props.height, width: 260}}>
             {step_buttons}
@@ -74,6 +73,13 @@ function TimeHorizontalBar(props: TimeHorizontalBarProps) {
     );
 }
 
+export const PROCESS_GRID_UNIT = {
+    'height': 60,
+    'width': 260,
+    'left_pad': 30,
+    'unit_of_time': 5,
+};
+
 function ProcessGrid() {
     const height = 60;
     const width = 260;
@@ -81,80 +87,44 @@ function ProcessGrid() {
     const unit_of_time = 5;
 
     const {processId} = useParams();
-    const [recipeResult, _recipeReexecuteQuery] = useProcessQuery({variables: {processId: processId!}});
+    const [processResult, _recipeReexecuteQuery] = useProcessQuery({variables: {processId: processId!}});
     const [resourceResult, _reexecuteQuery] = useResourcesQuery();
 
-    if (recipeResult.error != null || resourceResult.error != null) {
-        return <>{JSON.stringify(recipeResult.error)}</>;
+    if (processResult.error != null || resourceResult.error != null) {
+        return <>{JSON.stringify(processResult.error)}</>;
     }
 
-    if (recipeResult.fetching || recipeResult.data == null) {
+    if (processResult.fetching || processResult.data == null) {
         return <p>recipe Loading...</p>;
     }
 
-    recipeResult.data!.process.map((recipeDetail) =>
-        console.info(recipeDetail)
-    )
+    const resourceInfos = processResult.data!.process.resourceInfos
+    console.info(processResult.data!.process.resourceInfos);
 
     if (resourceResult.fetching || resourceResult.data == null) {
         return <p>resource Loading...</p>;
     }
 
-    resourceResult.data!.resources.map((r) =>
-        console.info(r)
-    )
-
-    const resource_steps = [
-        [
-            {
-                id: 0,
-                recipe_name: "カレー",
-                description: "野菜を切る",
-                top: 0 * height,
-                height: 0 * height + STEP_BUTTON_UNIT.height,
-            },
-            {
-                id: 1,
-                recipe_name: "きんぴらごぼう",
-                description: "野菜を切る",
-                top: 1 * height,
-                height: 0 * height + STEP_BUTTON_UNIT.height,
+    const step_lists: StepButtonProps[][] = [];
+    resourceInfos.forEach(resourceInfo => {
+        const steps: StepButtonProps[] = [];
+        resourceInfo.steps.forEach(step => {
+            const s: StepButtonProps = {
+                id: step.id,
+                recipe_name: step.recipeName,
+                description: step.description,
+                top: (step.startTime / PROCESS_GRID_UNIT.unit_of_time) * PROCESS_GRID_UNIT.height,
+                height: (step.duration / PROCESS_GRID_UNIT.unit_of_time - 1) * PROCESS_GRID_UNIT.height + STEP_BUTTON_UNIT.height,
             }
-        ], [
-            {
-                id: 2,
-                recipe_name: "カレー",
-                description: "煮込む",
-                top: 1 * height,
-                height: 0 * height + STEP_BUTTON_UNIT.height,
-            },
-            {
-                id: 3,
-                recipe_name: "きんぴらごぼう",
-                description: "柔らかくなるまで煮る",
-                top: 2 * height,
-                height: 1 * height + STEP_BUTTON_UNIT.height,
-            }
-        ], [
-            {
-                id: 4,
-                recipe_name: "きんぴらごぼう",
-                description: "下ごしらえ",
-                top: 0 * height,
-                height: 0 * height + STEP_BUTTON_UNIT.height,
-            },
-            {
-                id: 1,
-                recipe_name: "ブロッコリー",
-                description: "電子レンジで温める",
-                top: 4 * height,
-                height: 0 * height + STEP_BUTTON_UNIT.height,
-            }
-        ]
-    ];
+            steps.push(s)
+        });
+        step_lists.push(steps);
+    });
+    console.info("step_lists");
+    console.info(step_lists);
 
-    const resource_kind = resource_steps.length;
-
+    const resource_kind = step_lists.length;
+    // TODO: set from max of end time
     const time_label_count = 12;
     const time_label_values = Array.from(Array(time_label_count).keys()).map(x => x * unit_of_time);
     const time_label_list = time_label_values.map((value) => <TimeLabel time={value}/>);
@@ -170,7 +140,7 @@ function ProcessGrid() {
         .map(i => <ResourceColumn top={0}
                                   left={i * width + left_pad}
                                   height={bar_height}
-                                  steps={resource_steps[i]}/>);
+                                  steps={step_lists[i]}/>);
 
     return (
         <div>
