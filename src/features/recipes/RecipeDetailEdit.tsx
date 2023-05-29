@@ -122,7 +122,7 @@ function RecipeEdit({id, title, description, steps}: RecipeDetail) {
         await createStep({createRecipeStepData: {id: id, steps: createdSteps}});
 
         // If id is empty, its step is treated as creation
-        //navigate(`/recipes/${id}`);
+        navigate(`/recipes/${id}`);
     };
 
     // TODO: validate description, resourceId, duration
