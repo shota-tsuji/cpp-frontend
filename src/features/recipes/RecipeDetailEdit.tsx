@@ -1,5 +1,12 @@
 import {useNavigate, useParams} from "react-router-dom";
-import {RecipeDetail, StepInput, useRecipeDetailQuery, useUpdateRecipeDetailMutation} from "../../generated/graphql";
+import {
+    CreateStepInput,
+    RecipeDetail,
+    StepInput,
+    useCreateStepMutation,
+    useRecipeDetailQuery,
+    useUpdateRecipeDetailMutation
+} from "../../generated/graphql";
 import {useForm} from "@mantine/form";
 import {Box, Button, Center, Code, Group, NumberInput, Text, TextInput, Title} from "@mantine/core";
 import {DragDropContext, Draggable, Droppable} from 'react-beautiful-dnd';
@@ -31,6 +38,7 @@ export default function RecipeDetailEdit() {
 function RecipeEdit({id, title, description, steps}: RecipeDetail) {
     const navigate = useNavigate();
     const [_updateRecipeDetailResult, updateRecipeDetail] = useUpdateRecipeDetailMutation();
+    const [_createStepResult, createStep] = useCreateStepMutation();
 
     // To compare modified steps, keep original recipe detail
     const originalSteps = _.cloneDeep(steps);
@@ -66,7 +74,7 @@ function RecipeEdit({id, title, description, steps}: RecipeDetail) {
                     <NumberInput
                         withAsterisk
                         mt="md"
-                        label="Amount"
+                        label="Resource"
                         {...form.getInputProps(`steps.${index}.resourceId`)}
                     />
                 </Group>
@@ -76,19 +84,42 @@ function RecipeEdit({id, title, description, steps}: RecipeDetail) {
 
     // TODO: Filtering with respect to step ids
     const handleSubmit = async (values: RecipeDetail) => {
-        console.info(originalSteps);
-        console.info(values);
+        //console.info(originalSteps);
+        //console.info(values);
+
+        const createdSteps: CreateStepInput[] = [];
+        /*
+        values.steps.map((s, index) => {
+            // update order number as permuted order in the form
+            s.orderNumber = index;
+            const stepInput: CreateStepInput = {id: s.id, description: s.description, duration: s.duration, orderNumber: index, resourceId: s.resourceId};
+            return stepInput;
+        }).filter(step => step.id == '');
+         */
+        values.steps.forEach((step, index) => {
+            if (step.id == '') {
+                const createdStep: CreateStepInput = {
+                    description: step.description,
+                    duration: step.duration,
+                    orderNumber: index,
+                    resourceId: step.resourceId
+                }
+                createdSteps.push(createdStep);
+            }
+        });
+
         // Filtering
         // Loop for values and check each step_id and update (set) orderNumber
         const updatedSteps = values.steps.map((s, index) => {
             // update order number as permuted order in the form
             s.orderNumber = index;
-            console.info(s, index);
+            //console.info(s, index);
             const stepInput: StepInput = {id: s.id, description: s.description, duration: s.duration, orderNumber: index, resourceId: s.resourceId};
             return stepInput;
         }).filter(step => step.id != '');
-        console.info(updatedSteps);
+        console.info(createdSteps);
         await updateRecipeDetail({recipeDetailData: {id: id, title: values.title, description: values.description, steps: updatedSteps}});
+        await createStep({createRecipeStepData: {id: id, steps: createdSteps}});
 
         // If id is empty, its step is treated as creation
         navigate(`/recipes/${id}`);
