@@ -61,7 +61,7 @@ type Mutation {
 	updateRecipeDetail(recipeDetailData: UpdateRecipeDetailInput!): RecipeDetail!
 	updateResource(resourceData: UpdateResourceInput!): Resource!
 	createProcess(recipeIdList: CreateProcessInput!): ProcessId!
-	createStep(recipeDetailData: CreateRecipeStepInput!): RecipeId!
+	createStep(createRecipeStepData: CreateRecipeStepInput!): RecipeId!
 }
 
 type Query {
