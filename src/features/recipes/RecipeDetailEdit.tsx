@@ -1,14 +1,14 @@
 import {useNavigate, useParams} from "react-router-dom";
 import {
     CreateStepInput,
-    RecipeDetail,
+    RecipeDetail, Resource, Step,
     StepInput,
     useCreateStepMutation,
-    useRecipeDetailQuery,
+    useRecipeDetailQuery, useResourcesQuery,
     useUpdateRecipeDetailMutation
 } from "../../generated/graphql";
 import {useForm} from "@mantine/form";
-import {Box, Button, Center, Code, Group, NumberInput, Text, TextInput, Title} from "@mantine/core";
+import {Box, Button, Center, Code, Group, NumberInput, Select, Text, TextInput, Title} from "@mantine/core";
 import {DragDropContext, Draggable, Droppable} from 'react-beautiful-dnd';
 import {IconGripVertical} from '@tabler/icons-react';
 import * as _ from 'lodash';
@@ -16,29 +16,45 @@ import * as _ from 'lodash';
 // TODO: order_number 更新だけをする form 作成
 export default function RecipeDetailEdit() {
     const {recipeId} = useParams();
-    const [result, _reexecuteQuery] = useRecipeDetailQuery({variables: {recipeId: recipeId!}});
-    const {data, fetching, error} = result;
+    const [recipeDetailResult, _recipeDetailReexecuteQuery] = useRecipeDetailQuery({variables: {recipeId: recipeId!}});
+    const [resourceResult, _resourceReexecuteQuery] = useResourcesQuery();
 
-    if (error != null) {
-        return <>{JSON.stringify(error)}</>;
+    if (recipeDetailResult.error != null || resourceResult.error != null) {
+        return <>{JSON.stringify(recipeDetailResult.error)}</>;
     }
 
-    if (fetching || data == null) {
-        return <p>Loading...</p>;
+    if (recipeDetailResult.fetching || recipeDetailResult.data == null) {
+        return <p>recipe Loading...</p>;
+    }
+    if (resourceResult.fetching || resourceResult.data == null) {
+        return <p>recipe Loading...</p>;
     }
 
-    const {id, title, description, steps} = data!.recipeDetail;
+    const {id, title, description, steps} = recipeDetailResult.data!.recipeDetail;
+    const resources = resourceResult.data!.resources;
 
-    //const [result, _reexecuteQuery] = useUpdateRecipeDetailMutation({});
     return (
-        <RecipeEdit description={description} id={id} steps={steps} title={title}/>
+        <RecipeEdit description={description} id={id} steps={steps} title={title} resources={resources}/>
     );
 }
 
-function RecipeEdit({id, title, description, steps}: RecipeDetail) {
+type RecipeEditProps = {
+   id: string;
+   title: string;
+   description: string;
+   steps: Step[];
+   resources: Resource[];
+}
+
+function RecipeEdit({id, title, description, steps, resources}: RecipeEditProps) {
     const navigate = useNavigate();
     const [_updateRecipeDetailResult, updateRecipeDetail] = useUpdateRecipeDetailMutation();
     const [_createStepResult, createStep] = useCreateStepMutation();
+
+    // Prepare resource select data
+    const resourceData = resources.map(resource => {
+        return { value: resource.id, label: resource.name }
+    });
 
     // To compare modified steps, keep original recipe detail
     const originalSteps = _.cloneDeep(steps);
@@ -47,9 +63,18 @@ function RecipeEdit({id, title, description, steps}: RecipeDetail) {
         initialValues: {
             title: title,
             description: description,
-            steps: steps
+            steps: steps,
+            resourceId: 1,
         },
     });
+    /*
+                    <NumberInput
+                        withAsterisk
+                        mt="md"
+                        label="Resource"
+                        {...form.getInputProps(`steps.${index}.resourceId`)}
+                    />
+     */
 
     const fields = form.values.steps.map((_, index) => (
         <Draggable key={index} index={index} draggableId={index.toString()}>
@@ -71,10 +96,10 @@ function RecipeEdit({id, title, description, steps}: RecipeDetail) {
                         label="Duration"
                         {...form.getInputProps(`steps.${index}.duration`)}
                     />
-                    <NumberInput
-                        withAsterisk
+                    <Select
                         mt="md"
                         label="Resource"
+                        data={resourceData}
                         {...form.getInputProps(`steps.${index}.resourceId`)}
                     />
                 </Group>
