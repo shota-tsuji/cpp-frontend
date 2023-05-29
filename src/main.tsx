@@ -4,7 +4,7 @@ import App from './App.tsx'
 import './index.css'
 
 const client = createClient({
-  url: 'http://0.0.0.0:8080/',
+  url: 'http://backend:8080/',
   exchanges: [cacheExchange, fetchExchange]
 });
 
