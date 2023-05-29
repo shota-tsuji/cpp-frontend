@@ -8,7 +8,7 @@ import {
     useUpdateRecipeDetailMutation
 } from "../../generated/graphql";
 import {useForm} from "@mantine/form";
-import {Box, Button, Center, Code, Group, NumberInput, Text, TextInput, Title} from "@mantine/core";
+import {Box, Button, Center, Code, Group, NumberInput, Select, Text, TextInput, Title} from "@mantine/core";
 import {DragDropContext, Draggable, Droppable} from 'react-beautiful-dnd';
 import {IconGripVertical} from '@tabler/icons-react';
 import * as _ from 'lodash';
@@ -51,6 +51,11 @@ function RecipeEdit({id, title, description, steps, resources}: RecipeEditProps)
     const [_updateRecipeDetailResult, updateRecipeDetail] = useUpdateRecipeDetailMutation();
     const [_createStepResult, createStep] = useCreateStepMutation();
 
+    // Prepare resource select data
+    const resourceData = resources.map(resource => {
+        return { value: resource.id, label: resource.name }
+    });
+
     // To compare modified steps, keep original recipe detail
     const originalSteps = _.cloneDeep(steps);
 
@@ -58,9 +63,18 @@ function RecipeEdit({id, title, description, steps, resources}: RecipeEditProps)
         initialValues: {
             title: title,
             description: description,
-            steps: steps
+            steps: steps,
+            resourceId: 1,
         },
     });
+    /*
+                    <NumberInput
+                        withAsterisk
+                        mt="md"
+                        label="Resource"
+                        {...form.getInputProps(`steps.${index}.resourceId`)}
+                    />
+     */
 
     const fields = form.values.steps.map((_, index) => (
         <Draggable key={index} index={index} draggableId={index.toString()}>
@@ -82,10 +96,10 @@ function RecipeEdit({id, title, description, steps, resources}: RecipeEditProps)
                         label="Duration"
                         {...form.getInputProps(`steps.${index}.duration`)}
                     />
-                    <NumberInput
-                        withAsterisk
+                    <Select
                         mt="md"
                         label="Resource"
+                        data={resourceData}
                         {...form.getInputProps(`steps.${index}.resourceId`)}
                     />
                 </Group>
